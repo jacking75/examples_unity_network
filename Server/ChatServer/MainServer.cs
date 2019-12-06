@@ -156,11 +156,23 @@ namespace ChatServer
         {
             MainLogger.Debug($"세션 번호: {session.SessionID}, 받은 데이터 크기: {reqInfo.Size}, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
 
-            if(reqInfo.PacketID == (UInt16)CSBaseLib.PACKETID.REQ_RES_TEST_ECHO)
+            if(reqInfo.PacketID == (UInt16)CSBaseLib.PACKETID.PACKET_ID_ECHO)
             {
                 var sendPacket = new EchoResPacket();
                 sendPacket.SetValue(reqInfo.Body);
                 session.Send(sendPacket.Data, 0, sendPacket.Data.Length);
+                return;
+            }
+            else if(reqInfo.PacketID == (UInt16)CSBaseLib.PACKETID.PACKET_ID_SIMPLE_CHAT)
+            {
+                var sendPacket = new SimpleChatPacket();
+                sendPacket.SetValue(reqInfo.Body);
+                
+                foreach (var client in GetAllSessions())
+                {
+                    client.Send(sendPacket.Data, 0, sendPacket.Data.Length);
+                }
+
                 return;
             }
 

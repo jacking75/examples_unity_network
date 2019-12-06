@@ -28,11 +28,19 @@ namespace NetLib
 	}
 
 
-	public class MyDebug
+
+	class PacketDef
 	{
-		public static void Log(string msg)
-		{
-			Console.WriteLine(msg);
-		}
+		public const Int16 PACKET_HEADER_SIZE = 5;
+
+		public const UInt16 SysPacketIDDisConnectdFromServer = 1;
+	}
+
+	public struct PacketData
+	{
+		public UInt16 DataSize;
+		public UInt16 PacketID;
+		public SByte Type;
+		public byte[] BodyData;
 	}
 }

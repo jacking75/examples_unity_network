@@ -37,9 +37,9 @@ namespace CSBaseLib
     // 1 ~ 10000
     public enum PACKETID : UInt16
     {
-        REQ_RES_TEST_ECHO = 101,
-        
-               
+        PACKET_ID_ECHO = 101,
+        PACKET_ID_SIMPLE_CHAT = 103,
+
         // 클라이언트
         CS_BEGIN        = 1001,
 
@@ -100,15 +100,30 @@ namespace CSBaseLib
         public void SetValue(byte[] bodyData)
         {
             var totalSize = (UInt16)(PacketDef.PACKET_HEADER_SIZE + bodyData.Length);
-            var packetIDbuf = BitConverter.GetBytes((UInt16)PACKETID.REQ_RES_TEST_ECHO);
+            var packetIDbuf = BitConverter.GetBytes((UInt16)PACKETID.PACKET_ID_ECHO);
 
-            Data = new byte[PacketDef.PACKET_HEADER_SIZE];
+            Data = new byte[PacketDef.PACKET_HEADER_SIZE + bodyData.Length];
+
+            Buffer.BlockCopy(BitConverter.GetBytes(totalSize), 0, Data, 0, 2);
+            Buffer.BlockCopy(packetIDbuf, 0, Data, 2, 2);
+            Buffer.BlockCopy(bodyData, 0, Data, 5, bodyData.Length);
+        }        
+    }
+
+    public class SimpleChatPacket
+    {
+        public byte[] Data;
+
+        public void SetValue(byte[] bodyData)
+        {
+            var totalSize = (UInt16)(PacketDef.PACKET_HEADER_SIZE + bodyData.Length);
+            var packetIDbuf = BitConverter.GetBytes((UInt16)PACKETID.PACKET_ID_SIMPLE_CHAT);
+
+            Data = new byte[PacketDef.PACKET_HEADER_SIZE + bodyData.Length];
 
             Buffer.BlockCopy(BitConverter.GetBytes(totalSize), 0, Data, 0, 2);
             Buffer.BlockCopy(packetIDbuf, 0, Data, 2, 2);
             Buffer.BlockCopy(bodyData, 0, Data, 5, bodyData.Length);
         }
-
-        
     }
 }

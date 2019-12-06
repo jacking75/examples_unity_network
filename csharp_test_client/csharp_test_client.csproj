@@ -58,7 +58,7 @@
       <DependentUpon>mainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="NetLib\NetworkDef.cs" />
-    <Compile Include="NetLib\PacketQueue.cs" />
+    <Compile Include="NetLib\PacketBufferManager.cs" />
     <Compile Include="NetLib\TransportTCP.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="PacketBufferManager.cs" />

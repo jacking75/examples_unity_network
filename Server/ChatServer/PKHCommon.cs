@@ -22,15 +22,12 @@ namespace ChatServer
         {            
             packetHandlerMap.Add((int)CSBaseLib.PACKETID.NTF_IN_CONNECT_CLIENT, NotifyInConnectClient);
             packetHandlerMap.Add((int)CSBaseLib.PACKETID.NTF_IN_DISCONNECT_CLIENT, NotifyInDisConnectClient);
-
-            packetHandlerMap.Add((int)CSBaseLib.PACKETID.REQ_RES_TEST_ECHO, RequestEcho);
-            packetHandlerMap.Add((int)CSBaseLib.PACKETID.REQ_LOGIN, RequestLogin);
-                                                
         }
 
         public void NotifyInConnectClient(ServerPacketData requestData)
         {
             MainServer.MainLogger.Debug($"Current Connected Session Count: {ServerNetwork.SessionCount}");
+            
         }
 
         public void NotifyInDisConnectClient(ServerPacketData requestData)
@@ -48,15 +45,7 @@ namespace ChatServer
 
 
 
-        public void RequestEcho(ServerPacketData packetData)
-        {
-            var sessionID = packetData.SessionID;
-            var sessionIndex = packetData.SessionIndex;
-            MainServer.MainLogger.Debug("Echo 요청 받음");
-
-            ServerNetwork.SendData(sessionID, packetData.BodyData);
-        }
-
+        
 
         public void RequestLogin(ServerPacketData packetData)
         {

@@ -6,14 +6,6 @@ using System.Threading.Tasks;
 
 namespace csharp_test_client
 {
-    struct PacketData
-    {
-        public UInt16 DataSize;
-        public UInt16 PacketID;
-        public SByte Type;
-        public byte[] BodyData;
-    }
-
     public class PacketDump
     {
         public static string Bytes(byte[] byteArr)
@@ -40,6 +32,7 @@ namespace csharp_test_client
         }
     }
     
+        
 
     public class LoginReqPacket
     {

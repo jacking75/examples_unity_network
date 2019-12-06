@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Net;
+using System;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -11,21 +11,17 @@ namespace NetLib
 		// 클라이언트와의 접속용 소켓.
 		private Socket TcpSocket = null;
 
-		// 송신 버퍼.
-		//private PacketQueue m_sendQueue;
-		// 수신 버퍼.
-		//private PacketQueue m_recvQueue;
 		System.Collections.Concurrent.ConcurrentQueue<byte[]> SendQueue = new System.Collections.Concurrent.ConcurrentQueue<byte[]>();
 		System.Collections.Concurrent.ConcurrentQueue<byte[]> RecvQueue = new System.Collections.Concurrent.ConcurrentQueue<byte[]>();
-				
+
+		PacketBufferManager PacketBuffer = new PacketBufferManager();
+
 		// 접속 플래그.
 		public bool IsConnected { get; private set; } = false;
 
 		
 		// 이벤트 통지 델리게이트.
 		public delegate void EventHandler(NetEventState state);
-
-		//private EventHandler m_handler;
 
 		
 		// 스레스 실행 플래그.
@@ -37,11 +33,11 @@ namespace NetLib
 
 		public System.Action<string> DebugPrintFunc;
 
+
 		// Use this for initialization
-		void Start()
-		{
-			//m_sendQueue = new PacketQueue();
-			//m_recvQueue = new PacketQueue();
+		public void Start()
+		{			
+			PacketBuffer.Init(8096, PacketDef.PACKET_HEADER_SIZE, 1024);
 		}
 
 				
@@ -75,16 +71,6 @@ namespace NetLib
 				DebugPrintFunc("Connect fail");
 			}
 
-			//if (m_handler != null)
-			//{
-			//	// 접속 결과를 통지합니다. 
-			//	NetEventState state = new NetEventState();
-			//	state.type = NetEventType.Connect;
-			//	state.result = (IsConnected == true) ? NetEventResult.Success : NetEventResult.Failure;
-			//	m_handler(state);
-			//	DebugPrintFunc("event handler called");
-			//}
-
 			return IsConnected;
 		}
 
@@ -95,20 +81,13 @@ namespace NetLib
 
 			if (TcpSocket != null)
 			{
+				IsRunThreadLoop = false;
+
 				// 소켓 클로즈.
 				TcpSocket.Shutdown(SocketShutdown.Both);
 				TcpSocket.Close();
 				TcpSocket = null;
-			}
-
-			// 끊기를 통지합니다.
-			//if (m_handler != null)
-			//{
-			//	NetEventState state = new NetEventState();
-			//	state.type = NetEventType.Disconnect;
-			//	state.result = NetEventResult.Success;
-			//	m_handler(state);
-			//}
+			}						
 		}
 
 		// 송신처리.
@@ -122,19 +101,7 @@ namespace NetLib
 		{
 			return RecvQueue.TryDequeue(out buffer);
 		}
-
-		//// 이벤트 통지함수 등록.
-		//public void RegisterEventHandler(EventHandler handler)
-		//{
-		//	m_handler += handler;
-		//}
-
-		//// 이벤트 통지함수 삭제.
-		//public void UnregisterEventHandler(EventHandler handler)
-		//{
-		//	m_handler -= handler;
-		//}
-
+				
 		// 스레드 실행 함수.
 		bool LaunchThread()
 		{
@@ -206,10 +173,10 @@ namespace NetLib
 			// 수신처리.
 			try
 			{
+				byte[] buffer = new byte[MtuSize];
+
 				while (TcpSocket.Poll(0, SelectMode.SelectRead))
 				{
-					byte[] buffer = new byte[MtuSize];
-
 					int recvSize = TcpSocket.Receive(buffer, buffer.Length, SocketFlags.None);
 					if (recvSize == 0)
 					{
@@ -221,7 +188,9 @@ namespace NetLib
 					}
 					else if (recvSize > 0)
 					{
-						RecvQueue.Enqueue(buffer);
+						var recvData = new byte[recvSize];
+						Buffer.BlockCopy(buffer, 0, recvData, 0, recvSize);
+						RecvQueue.Enqueue(recvData);
 					}
 				}
 			}
@@ -232,5 +201,44 @@ namespace NetLib
 		}
 
 
+		// 애플리케이션 레이어에서 호출해야 한다. 스레드 세이프하지 않다.
+		public PacketData GetPacket()
+		{
+			var packet = new PacketData();
+			const Int16 PacketHeaderSize = PacketDef.PACKET_HEADER_SIZE;
+
+			byte[] buffer = null;
+			var result = Receive(out buffer);
+			if (result == false)
+			{
+				return packet;
+			}
+
+			if (buffer.Length > 1)
+			{
+				PacketBuffer.Write(buffer, 0, buffer.Length);
+
+				var data = PacketBuffer.Read();
+				if (data.Count < 1)
+				{
+					return packet;
+				}
+
+				
+				packet.DataSize = (UInt16)(data.Count - PacketHeaderSize);
+				packet.PacketID = BitConverter.ToUInt16(data.Array, data.Offset + 2);
+				packet.Type = (SByte)data.Array[(data.Offset + 4)];
+				packet.BodyData = new byte[packet.DataSize];
+				Buffer.BlockCopy(data.Array, (data.Offset + PacketHeaderSize), packet.BodyData, 0, (data.Count - PacketHeaderSize));
+
+				return packet;
+			}
+
+			// 서버에서 접속을 종료하였음을 알린다.
+			packet.PacketID = PacketDef.SysPacketIDDisConnectdFromServer;
+			return packet;
+		}
 	}
+
+	
 }

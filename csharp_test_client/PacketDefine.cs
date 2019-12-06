@@ -8,7 +8,6 @@ namespace csharp_test_client
 {
     class PacketDef
     {
-        public const Int16 PACKET_HEADER_SIZE = 5;
         public const int MAX_USER_ID_BYTE_LENGTH = 16;
         public const int MAX_USER_PW_BYTE_LENGTH = 16;
     }
@@ -16,6 +15,7 @@ namespace csharp_test_client
     public enum PACKET_ID : ushort
     {
         PACKET_ID_ECHO = 101,
+        PACKET_ID_SIMPLE_CHAT = 103,
 
         // Ping(Heart-beat)
         PACKET_ID_PING_REQ = 201,

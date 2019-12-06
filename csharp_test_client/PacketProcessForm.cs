@@ -13,6 +13,8 @@ namespace csharp_test_client
         void SetPacketHandler()
         {
             PacketFuncDic.Add(PACKET_ID.PACKET_ID_ECHO, PacketProcess_Echo);
+            PacketFuncDic.Add(PACKET_ID.PACKET_ID_SIMPLE_CHAT, PacketProcess_SimpleChat);
+
             PacketFuncDic.Add(PACKET_ID.PACKET_ID_ERROR_NTF, PacketProcess_ErrorNotify);
             PacketFuncDic.Add(PACKET_ID.PACKET_ID_LOGIN_RES, PacketProcess_LoginResponse);
             PacketFuncDic.Add(PACKET_ID.PACKET_ID_ROOM_ENTER_RES, PacketProcess_RoomEnterResponse);
@@ -25,7 +27,7 @@ namespace csharp_test_client
             PacketFuncDic.Add(PACKET_ID.PACKET_ID_ROOM_RELAY_NTF, PacketProcess_RoomRelayNotify);
         }
 
-        void PacketProcess(PacketData packet)
+        void PacketProcess(NetLib.PacketData packet)
         {
             var packetType = (PACKET_ID)packet.PacketID;
             //DevLog.Write("Packet Error:  PacketID:{packet.PacketID.ToString()},  Error: {(ERROR_CODE)packet.Result}");
@@ -44,6 +46,12 @@ namespace csharp_test_client
         void PacketProcess_Echo(byte[] bodyData)
         {
             DevLog.Write($"Echo 받음:  {bodyData.Length}");
+        }
+
+        void PacketProcess_SimpleChat(byte[] bodyData)
+        {
+            var stringData = Encoding.UTF8.GetString(bodyData);
+            DevLog.Write($"SimpleChat 받음: {stringData}");
         }
 
         void PacketProcess_ErrorNotify(byte[] bodyData)
