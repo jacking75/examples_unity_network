@@ -31,26 +31,26 @@ namespace csharp_test_client
             return true;
         }
     }
-    
-        
+
+
 
     public class LoginReqPacket
     {
-        byte[] UserID = new byte[PacketDef.MAX_USER_ID_BYTE_LENGTH];
-        byte[] UserPW = new byte[PacketDef.MAX_USER_PW_BYTE_LENGTH];
+        public string UserID;
 
-        public void SetValue(string userID, string userPW)
+        public void SetValue(string userID)
         {
-            Encoding.UTF8.GetBytes(userID).CopyTo(UserID, 0);
-            Encoding.UTF8.GetBytes(userPW).CopyTo(UserPW, 0);
+            UserID = userID;
         }
 
         public byte[] ToBytes()
         {
-            List<byte> dataSource = new List<byte>();
-            dataSource.AddRange(UserID);
-            dataSource.AddRange(UserPW);
-            return dataSource.ToArray();
+            return Encoding.UTF8.GetBytes(UserID);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            UserID = Encoding.UTF8.GetString(bodyData);
         }
     }
 
@@ -58,196 +58,149 @@ namespace csharp_test_client
     {
         public Int16 Result;
 
-        public bool FromBytes(byte[] bodyData)
+        public byte[] ToBytes()
+        {
+            return BitConverter.GetBytes(Result);
+        }
+
+        public void Decode(byte[] bodyData)
         {
             Result = BitConverter.ToInt16(bodyData, 0);
-            return true;
         }
     }
 
-
-    public class RoomEnterReqPacket
+    public class LobbyEnterReqPacket
     {
-        int RoomNumber;
-        public void SetValue(int roomNumber)
-        {
-            RoomNumber = roomNumber;
-        }
+        public int LobbyNumber;
 
         public byte[] ToBytes()
         {
-            List<byte> dataSource = new List<byte>();
-            dataSource.AddRange(BitConverter.GetBytes(RoomNumber));
-            return dataSource.ToArray();
+            return BitConverter.GetBytes(LobbyNumber);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            LobbyNumber = BitConverter.ToInt32(bodyData, 0);
         }
     }
 
-    public class RoomEnterResPacket
+    public class LobbyEnterResPacket
     {
         public Int16 Result;
-        public Int64 RoomUserUniqueId;
-
-        public bool FromBytes(byte[] bodyData)
-        {
-            Result = BitConverter.ToInt16(bodyData, 0);
-            RoomUserUniqueId = BitConverter.ToInt64(bodyData, 2);
-            return true;
-        }
-    }
-
-    public class RoomUserListNtfPacket
-    {
-        public int UserCount = 0;
-        public List<Int64> UserUniqueIdList = new List<Int64>();
-        public List<string> UserIDList = new List<string>();
-
-        public bool FromBytes(byte[] bodyData)
-        {
-            var readPos = 0;
-            var userCount = (SByte)bodyData[readPos];
-            ++readPos;
-
-            for (int i = 0; i < userCount; ++i)
-            {
-                var uniqeudId = BitConverter.ToInt64(bodyData, readPos);
-                readPos += 8;
-
-                var idlen = (SByte)bodyData[readPos];
-                ++readPos;
-
-                var id = Encoding.UTF8.GetString(bodyData, readPos, idlen);
-                readPos += idlen;
-
-                UserUniqueIdList.Add(uniqeudId);
-                UserIDList.Add(id);
-            }
-
-            UserCount = userCount;
-            return true;
-        }
-    }
-
-    public class RoomNewUserNtfPacket
-    {
-        public Int64 UserUniqueId;
-        public string UserID;
-
-        public bool FromBytes(byte[] bodyData)
-        {
-            var readPos = 0;
-
-            UserUniqueId = BitConverter.ToInt64(bodyData, readPos);
-            readPos += 8;
-
-            var idlen = (SByte)bodyData[readPos];
-            ++readPos;
-
-            UserID = Encoding.UTF8.GetString(bodyData, readPos, idlen);
-            readPos += idlen;
-
-            return true;
-        }
-    }
-
-
-    public class RoomChatReqPacket
-    {
-        Int16 MsgLen;
-        byte[] Msg;//= new byte[PacketDef.MAX_USER_ID_BYTE_LENGTH];
-
-        public void SetValue(string message)
-        {
-            Msg = Encoding.UTF8.GetBytes(message);
-            MsgLen = (Int16)Msg.Length;
-        }
 
         public byte[] ToBytes()
         {
-            List<byte> dataSource = new List<byte>();
-            dataSource.AddRange(BitConverter.GetBytes(MsgLen));
-            dataSource.AddRange(Msg);
-            return dataSource.ToArray();
+            return BitConverter.GetBytes(Result);
         }
-    }
 
-    public class RoomChatResPacket
-    {
-        public Int16 Result;
-        
-        public bool FromBytes(byte[] bodyData)
+        public void Decode(byte[] bodyData)
         {
             Result = BitConverter.ToInt16(bodyData, 0);
-            return true;
-        }
-    }
-
-    public class RoomChatNtfPacket
-    {
-        public Int64 UserUniqueId;
-        public string Message;
-
-        public bool FromBytes(byte[] bodyData)
-        {
-            UserUniqueId = BitConverter.ToInt64(bodyData, 0);
-
-            var msgLen = BitConverter.ToInt16(bodyData, 8);
-            byte[] messageTemp = new byte[msgLen];
-            Buffer.BlockCopy(bodyData, 8 + 2, messageTemp, 0, msgLen);
-            Message = Encoding.UTF8.GetString(messageTemp);
-            return true;
         }
     }
 
 
-     public class RoomLeaveResPacket
+    public class LobbyLeaveResPacket
     {
         public Int16 Result;
-        
-        public bool FromBytes(byte[] bodyData)
-        {
-            Result = BitConverter.ToInt16(bodyData, 0);
-            return true;
-        }
-    }
-
-    public class RoomLeaveUserNtfPacket
-    {
-        public Int64 UserUniqueId;
-
-        public bool FromBytes(byte[] bodyData)
-        {
-            UserUniqueId = BitConverter.ToInt64(bodyData, 0);
-            return true;
-        }
-    }
-
-
-    
-    public class RoomRelayNtfPacket
-    {
-        public Int64 UserUniqueId;
-        public byte[] RelayData;
-
-        public bool FromBytes(byte[] bodyData)
-        {
-            UserUniqueId = BitConverter.ToInt64(bodyData, 0);
-
-            var relayDataLen = bodyData.Length - 8;
-            RelayData = new byte[relayDataLen];
-            Buffer.BlockCopy(bodyData, 8, RelayData, 0, relayDataLen);
-            return true;
-        }
-    }
-
-
-    public class PingRequest
-    {
-        public Int16 PingNum;
 
         public byte[] ToBytes()
         {
-            return BitConverter.GetBytes(PingNum);
+            return BitConverter.GetBytes(Result);
         }
 
+        public void Decode(byte[] bodyData)
+        {
+            Result = BitConverter.ToInt16(bodyData, 0);
+        }
+    }
+
+
+
+    public class LobbyChatReqPacket
+    {
+        public string Msg;
+
+        public byte[] ToBytes()
+        {
+            return Encoding.UTF8.GetBytes(Msg);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            Msg = Encoding.UTF8.GetString(bodyData);
+        }
+    }
+
+    public class LobbyChatResPacket
+    {
+        public Int16 Result;
+
+        public byte[] ToBytes()
+        {
+            return BitConverter.GetBytes(Result);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            Result = BitConverter.ToInt16(bodyData, 0);
+        }
+    }
+
+    public class LobbyChatNtfPacket
+    {
+        public string Msg;
+
+        public byte[] ToBytes()
+        {
+            return Encoding.UTF8.GetBytes(Msg);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            Msg = Encoding.UTF8.GetString(bodyData);
+        }
+    }
+
+
+
+    public class LobbyMatchResPacket
+    {
+        public Int16 Result;
+
+        public byte[] ToBytes()
+        {
+            return BitConverter.GetBytes(Result);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            Result = BitConverter.ToInt16(bodyData, 0);
+        }
+    }
+
+
+    public class LobbyMatchNtfPacket
+    {
+        public string IP;
+        public UInt16 Port;
+        public Int32 RoomNumber;
+        //public string Info; //ip__port__roomNumber
+
+        public byte[] ToBytes()
+        {
+            var temp = $"{IP}__{Port}__{RoomNumber}";
+            return Encoding.UTF8.GetBytes(temp);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            var dataFormat = Encoding.UTF8.GetString(bodyData);
+            var elements = dataFormat.Split("__");
+
+            IP = elements[0];
+            Port = elements[1].ToUInt16();
+            RoomNumber = elements[2].ToInt32();
+        }
     }
 }

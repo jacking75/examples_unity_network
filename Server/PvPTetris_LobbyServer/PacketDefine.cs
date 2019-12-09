@@ -6,22 +6,20 @@ using System.Threading.Tasks;
 
 namespace LobbyServer
 {
-    // 0 ~ 9999
+    // 201 ~ 300
     public enum ERROR_CODE : short
     {
         NONE                        = 0, // 에러가 아니다
 
-        // 서버 초기화 에라
-        REDIS_INIT_FAIL             = 1,    // Redis 초기화 에러
+        
+        LOGIN_FULL_USER_COUNT = 201,
+        ADD_USER_NET_SESSION_ID_DUPLICATION = 202,
+        REMOVE_USER_SEARCH_FAILURE_USER_ID = 203,
 
-        LOGIN_FULL_USER_COUNT = 101,
-        ADD_USER_NET_SESSION_ID_DUPLICATION = 102,
-        REMOVE_USER_SEARCH_FAILURE_USER_ID = 103,
-
-        LOBBY_ENTER_INVALID_USER = 111,
-        LOBBY_ENTER_INVALID_STATE = 112,
-        LOBBY_ENTER_INVALID_ROOM_NUMBER = 114,
-        LOBBY_ENTER_FAIL_ADD_USER = 115,
+        LOBBY_ENTER_INVALID_USER = 211,
+        LOBBY_ENTER_INVALID_STATE = 212,
+        LOBBY_ENTER_INVALID_ROOM_NUMBER = 214,
+        LOBBY_ENTER_FAIL_ADD_USER = 215,
     }
 
     public enum SYS_PACKET_ID : UInt16
@@ -34,7 +32,7 @@ namespace LobbyServer
 
 
 
-    // 101 ~ 1000
+    // 101 ~ 200
     public enum CL_PACKET_ID : UInt16
     {
         CS_BEGIN        = 201,
@@ -231,7 +229,12 @@ namespace LobbyServer
 
         public void Decode(byte[] bodyData)
         {
-            //bodyData를 __로 나눈다
+            var dataFormat = Encoding.UTF8.GetString(bodyData);
+            var elements = dataFormat.Split("__");
+
+            IP = elements[0];
+            Port = elements[1].ToUInt16();
+            RoomNumber =  elements[2].ToInt32();
         }
     }
 }

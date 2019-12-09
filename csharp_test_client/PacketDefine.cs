@@ -17,33 +17,49 @@ namespace csharp_test_client
         PACKET_ID_ECHO = 101,
         PACKET_ID_SIMPLE_CHAT = 103,
 
-        // Ping(Heart-beat)
-        PACKET_ID_PING_REQ = 201,
-        PACKET_ID_PING_RES = 202,
+        // To LobbyServer
+        REQ_LOBBY_LOGIN = 202,
+        RES_LOBBY_LOGIN = 203,
 
-        PACKET_ID_ERROR_NTF = 203,
+        REQ_LOBBY_ENTER = 206,
+        RES_LOBBY_ENTER = 207,
+
+        REQ_LOBBY_LEAVE = 211,
+        RES_LOBBY_LEAVE = 212,
+
+        REQ_LOBBY_CHAT = 216,
+        RES_LOBBY_CHAT = 217,
+        NTF_LOBBY_CHAT = 218,
+
+        REQ_LOBBY_MATCH = 221,
+        RES_LOBBY_MATCH = 222,
+        NTF_LOBBY_MATCH = 223,
 
 
-        // 로그인
-        PACKET_ID_LOGIN_REQ = 701,
-        PACKET_ID_LOGIN_RES = 702,
-                
+        // To GameServer
+        REQ_GAME_LOGIN = 302,
+        RES_GAME_LOGIN = 303,
 
-        PACKET_ID_ROOM_ENTER_REQ = 721,
-        PACKET_ID_ROOM_ENTER_RES = 722,
-        PACKET_ID_ROOM_USER_LIST_NTF = 723,
-        PACKET_ID_ROOM_NEW_USER_NTF = 724,
+        REQ_ROOM_ENTER = 306,
+        RES_ROOM_ENTER = 307,
 
-         PACKET_ID_ROOM_LEAVE_REQ = 726,
-         PACKET_ID_ROOM_LEAVE_RES = 727,
-         PACKET_ID_ROOM_LEAVE_USER_NTF = 728,
+        REQ_ROOM_LEAVE = 311,
+        RES_ROOM_LEAVE = 312,
 
-         PACKET_ID_ROOM_CHAT_REQ = 731,
-         PACKET_ID_ROOM_CHAT_RES = 732,
-         PACKET_ID_ROOM_CHAT_NOTIFY = 733,
+        REQ_ROOM_CHAT = 316,
+        RES_ROOM_CHAT = 317,
+        NTF_ROOM_CHAT = 318,
 
-         PACKET_ID_ROOM_RELAY_REQ = 741,
-         PACKET_ID_ROOM_RELAY_NTF = 742,
+        REQ_GAME_START = 321,
+        RES_GAME_START = 322,
+        NTF_GAME_START = 323,
+
+        REQ_GAME_SYNC = 326,
+        NTF_GAME_SYNC = 327,
+
+        REQ_GAME_END = 341,
+        RES_GAME_END = 342,
+        NTF_GAME_END = 343,
     }
 
 

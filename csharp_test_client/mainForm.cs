@@ -306,6 +306,22 @@ namespace csharp_test_client
             //DevLog.Write($"방 릴레이 요청");
         }
 
-        
+        // 로비 입장 요청
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // 로비 나가기
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // 매칭 요청
+        private void button6_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
