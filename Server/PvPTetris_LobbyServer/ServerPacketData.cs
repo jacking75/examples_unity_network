@@ -13,7 +13,7 @@ namespace LobbyServer
         public UInt16 PacketSize;
         public string SessionID;         
         public UInt16 PacketID;        
-        public Byte Type;
+        public SByte Type;
         public byte[] BodyData;
                 
         

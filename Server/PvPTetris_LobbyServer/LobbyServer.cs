@@ -16,7 +16,7 @@ using SuperSocket.SocketEngine;
 
 namespace LobbyServer
 {
-    public class LobbyServer : AppServer<ClientSession, MsgPackBinaryRequestInfo>
+    public class LobbyServer : AppServer<ClientSession, EFBinaryRequestInfo>
     {
         public static ServerOption ServerOption;
         public static SuperSocket.SocketBase.Logging.ILog MainLogger;
@@ -28,11 +28,11 @@ namespace LobbyServer
 
         
         public LobbyServer()
-            : base(new DefaultReceiveFilterFactory<ReceiveFilter, MsgPackBinaryRequestInfo>())
+            : base(new DefaultReceiveFilterFactory<ReceiveFilter, EFBinaryRequestInfo>())
         {
             NewSessionConnected += new SessionHandler<ClientSession>(OnConnected);
             SessionClosed += new SessionHandler<ClientSession, CloseReason>(OnClosed);
-            NewRequestReceived += new RequestHandler<ClientSession, MsgPackBinaryRequestInfo>(OnPacketReceived);
+            NewRequestReceived += new RequestHandler<ClientSession, EFBinaryRequestInfo>(OnPacketReceived);
         }
 
         public void InitConfig(ServerOption option)
@@ -168,7 +168,7 @@ namespace LobbyServer
             Distribute(packet);
         }
 
-        void OnPacketReceived(ClientSession session, MsgPackBinaryRequestInfo reqInfo)
+        void OnPacketReceived(ClientSession session, EFBinaryRequestInfo reqInfo)
         {
             MainLogger.Debug(string.Format("세션 번호 {0} 받은 데이터 크기: {1}, ThreadId: {2}", session.SessionID, reqInfo.Body.Length, System.Threading.Thread.CurrentThread.ManagedThreadId));
 

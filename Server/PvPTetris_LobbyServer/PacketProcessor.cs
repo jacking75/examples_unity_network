@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 using System.Threading.Tasks.Dataflow;
 
-using ServerCommon;
 
 namespace LobbyServer
 {
@@ -59,13 +58,7 @@ namespace LobbyServer
             MsgBuffer.Post(data);
         }
 
-        public void SetMQ(Action<byte[]> sendToDBserverFunc, Action<byte[]> sendToMatchServerFunc)
-        {
-            CommonPacketHandler.SetMq(sendToDBserverFunc, sendToMatchServerFunc);
-            LobbyPacketHandler.SetMq(sendToDBserverFunc, sendToMatchServerFunc);
-        }
-
-
+        
         void RegistPacketHandler(LobbyServer serverNetwork)
         {            
             CommonPacketHandler.Init(serverNetwork, UserMgr);

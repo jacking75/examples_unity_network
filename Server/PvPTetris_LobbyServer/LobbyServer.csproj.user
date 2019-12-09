@@ -2,8 +2,8 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
-    <RevDeBugCompilerPath>c:\users\com2us\appdata\local\microsoft\visualstudio\16.0_4a8f3cba\extensions\lmxbftqg.afu\tmcc\</RevDeBugCompilerPath>
-    <CustomAfterMicrosoftCommonTargets>c:\users\com2us\appdata\local\microsoft\visualstudio\16.0_4a8f3cba\extensions\lmxbftqg.afu\tmcc\RevDeBug.ImportAfter.targets</CustomAfterMicrosoftCommonTargets>
+    <RevDeBugCompilerPath>C:\USERS\COM2US\APPDATA\LOCAL\MICROSOFT\VISUALSTUDIO\16.0_4A8F3CBA\EXTENSIONS\LMXBFTQG.AFU\tmcc\</RevDeBugCompilerPath>
+    <CustomAfterMicrosoftCommonTargets>C:\USERS\COM2US\APPDATA\LOCAL\MICROSOFT\VISUALSTUDIO\16.0_4A8F3CBA\EXTENSIONS\LMXBFTQG.AFU\tmcc\RevDeBug.ImportAfter.targets</CustomAfterMicrosoftCommonTargets>
     <RevDeBugActive>false</RevDeBugActive>
     <SaveMetadataAsync>true</SaveMetadataAsync>
     <RevDeBugDisableNuget>true</RevDeBugDisableNuget>

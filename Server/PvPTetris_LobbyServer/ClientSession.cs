@@ -9,7 +9,7 @@ using SuperSocket.SocketBase;
 
 namespace LobbyServer
 {
-    public class ClientSession : AppSession<ClientSession, MsgPackBinaryRequestInfo>
+    public class ClientSession : AppSession<ClientSession, EFBinaryRequestInfo>
     {        
     }
 }
