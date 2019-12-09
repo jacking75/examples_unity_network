@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerCommon
+namespace NetLib
 {
     class PacketBufferManager
     {
@@ -54,7 +54,6 @@ namespace ServerCommon
             {
                 BufferRelocate();
             }
-
             return true;
         }
 
@@ -67,10 +66,7 @@ namespace ServerCommon
                 return new ArraySegment<byte>();
             }
 
-            var packetDataSize = BitConverter.ToInt16(PacketData, (ReadPos + 0));
-            var bodySize = packetDataSize - HeaderSize;
-
-
+            var packetDataSize = BitConverter.ToInt16(PacketData, ReadPos);
             if (enableReadSize < packetDataSize)
             {
                 return new ArraySegment<byte>();
@@ -78,32 +74,6 @@ namespace ServerCommon
 
             var completePacketData = new ArraySegment<byte>(PacketData, ReadPos, packetDataSize);
             ReadPos += packetDataSize;
-
-            return completePacketData;
-        }
-
-
-        public ArraySegment<byte> Read(int n)
-        {
-            var enableReadSize = WritePos - ReadPos;
-
-            if (enableReadSize < HeaderSize)
-            {
-                return new ArraySegment<byte>();
-            }
-
-            var packetDataSize = BitConverter.ToInt16(PacketData, (ReadPos + n));
-            var bodySize = packetDataSize - HeaderSize;
-
-
-            if (enableReadSize < packetDataSize)
-            {
-                return new ArraySegment<byte>();
-            }
-
-            var completePacketData = new ArraySegment<byte>(PacketData, ReadPos, packetDataSize);
-            ReadPos += packetDataSize;
-
             return completePacketData;
         }
 

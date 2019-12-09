@@ -27,7 +27,8 @@ public class LoginRequest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (LobbyNetworkServer.Instance.m_ClientState == CLIENT_LOBBY_STATE.LOGIN && isLobbyRequestSended==false) {
+        if (LobbyNetworkServer.Instance.m_ClientState == CLIENT_LOBBY_STATE.LOGIN && isLobbyRequestSended==false) 
+        {
             LobbyNetworkServer.Instance.LobbyEnterRequest(0);
             isLobbyRequestSended = true;
         }

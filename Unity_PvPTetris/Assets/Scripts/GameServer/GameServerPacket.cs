@@ -113,13 +113,13 @@ namespace GameNetwork
         public const int MAX_CHAT_SIZE = 257;
     }
 
-    struct PacketData
-    {
-        public Int16 DataSize;
-        public Int16 PacketID;
-        public SByte Type;
-        public byte[] BodyData;
-    }
+    //struct PacketData
+    //{
+    //    public Int16 DataSize;
+    //    public Int16 PacketID;
+    //    public SByte Type;
+    //    public byte[] BodyData;
+    //}
 
     public class LoginReqPacket
     {
