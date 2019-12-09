@@ -1,0 +1,1 @@
+dotnet netcoreapp3.1\GameServer.dll --serverIndex 1 --name RoomServer --port 11022 --maxConnectionNumber 256  --maxRequestLength 1024 --receiveBufferSize 16384 --sendBufferSize 16384 --roomMaxCount 10 --roomMaxUserCount 2 --roomStartNumber 0

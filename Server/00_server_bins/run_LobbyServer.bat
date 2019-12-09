@@ -1,0 +1,1 @@
+dotnet netcoreapp3.1\LobbyServer.dll --serverIndex 0 --name LobbyServer --port 11021 --maxConnectionNumber 256  --maxRequestLength 1024 --receiveBufferSize 16384 --sendBufferSize 16384 --lobbyMaxCount 10 --lobbyMaxUserCount 4 --lobbyStartNumber 0
