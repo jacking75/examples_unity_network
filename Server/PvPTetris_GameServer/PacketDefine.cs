@@ -132,15 +132,23 @@ namespace LobbyServer
     public class RoomEnterResPacket
     {
         public Int16 Result;
+        public string RivalUserID;
 
         public byte[] ToBytes()
         {
-            return BitConverter.GetBytes(Result);
+            List<byte> dataSource = new List<byte>();
+            dataSource.AddRange(BitConverter.GetBytes(Result));
+            dataSource.AddRange(Encoding.UTF8.GetBytes(RivalUserID));
+
+            return dataSource.ToArray();
         }
 
         public void Decode(byte[] bodyData)
         {
+            var idLen = bodyData.Length - 2;
+
             Result = BitConverter.ToInt16(bodyData, 0);
+            RivalUserID = Encoding.UTF8.GetString(bodyData, 2, idLen);
         }
     }
 

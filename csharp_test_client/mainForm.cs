@@ -253,75 +253,88 @@ namespace csharp_test_client
             DevLog.Write($"Simple Chat 요청:  {textSendText.Text}, {body.Length}");
         }
 
-        // 로그인 요청
+        // 로비 로그인 요청
         private void button2_Click(object sender, EventArgs e)
         {
-            //var loginReq = new LoginReqPacket();
-            //loginReq.SetValue(textBoxUserID.Text, textBoxUserPW.Text);
+            var requestPkt = new LoginReqPacket();
+            requestPkt.UserID = textBoxUserID.Text;
                     
-            //PostSendPacket(PACKET_ID.PACKET_ID_LOGIN_REQ, loginReq.ToBytes());            
-            //DevLog.Write($"로그인 요청:  {textBoxUserID.Text}, {textBoxUserPW.Text}");
+            PostSendPacket(PACKET_ID.REQ_LOBBY_LOGIN, requestPkt.ToBytes());            
+            DevLog.Write($"로그인 요청:  {textBoxUserID.Text}, {textBoxUserPW.Text}");
         }
 
+        // 방 들어가기
         private void btn_RoomEnter_Click(object sender, EventArgs e)
         {
-            //var requestPkt = new RoomEnterReqPacket();
-            //requestPkt.SetValue(textBoxRoomNumber.Text.ToInt32());
-
-            //PostSendPacket(PACKET_ID.PACKET_ID_ROOM_ENTER_REQ, requestPkt.ToBytes());
-            //DevLog.Write($"방 입장 요청:  {textBoxRoomNumber.Text} 번");
+            var requestPkt = new RoomEnterReqPacket();
+            requestPkt.RoomNumber = textBoxRoomNumber.Text.ToInt32();
+            
+            PostSendPacket(PACKET_ID.REQ_ROOM_ENTER, requestPkt.ToBytes());
+            DevLog.Write($"방 입장 요청:  {textBoxRoomNumber.Text} 번");
         }
 
+        // 방 나가기
         private void btn_RoomLeave_Click(object sender, EventArgs e)
         {
-            //PostSendPacket(PACKET_ID.PACKET_ID_ROOM_LEAVE_REQ,  null);
-            //DevLog.Write($"방 입장 요청:  {textBoxRoomNumber.Text} 번");
+            PostSendPacket(PACKET_ID.REQ_ROOM_LEAVE,  null);
+            DevLog.Write($"방 나가기 요청:  {textBoxRoomNumber.Text} 번");
         }
 
+        // 방 채팅
         private void btnRoomChat_Click(object sender, EventArgs e)
         {
-            //if(textBoxRoomSendMsg.Text.IsEmpty())
-            //{
-            //    MessageBox.Show("채팅 메시지를 입력하세요");
-            //    return;
-            //}
+            if (textBoxRoomSendMsg.Text.IsEmpty())
+            {
+                MessageBox.Show("채팅 메시지를 입력하세요");
+                return;
+            }
 
-            //var requestPkt = new RoomChatReqPacket();
-            //requestPkt.SetValue(textBoxRoomSendMsg.Text);
-
-            //PostSendPacket(PACKET_ID.PACKET_ID_ROOM_CHAT_REQ, requestPkt.ToBytes());
-            //DevLog.Write($"방 채팅 요청");
+            var requestPkt = new RoomChatReqPacket();
+            requestPkt.Msg = $"[{textBoxUserID.Text}]: {textBoxRoomSendMsg.Text}";
+            
+            PostSendPacket(PACKET_ID.REQ_ROOM_CHAT, requestPkt.ToBytes());
+            DevLog.Write($"방 채팅 요청");
         }
 
-        private void btnRoomRelay_Click(object sender, EventArgs e)
+        // 게임 시작
+        private void btnGameStart_Click(object sender, EventArgs e)
         {
-            //if( textBoxRelay.Text.IsEmpty())
-            //{
-            //    MessageBox.Show("릴레이 할 데이터가 없습니다");
-            //    return;
-            //}
-            
-            //var bodyData = Encoding.UTF8.GetBytes(textBoxRelay.Text);
-            //PostSendPacket(PACKET_ID.PACKET_ID_ROOM_RELAY_REQ, bodyData);
-            //DevLog.Write($"방 릴레이 요청");
+            PostSendPacket(PACKET_ID.REQ_GAME_START, null);
+            DevLog.Write($"게임 시작 요청");
         }
 
         // 로비 입장 요청
         private void button4_Click(object sender, EventArgs e)
         {
-
+            var requestPkt = new LobbyEnterReqPacket();
+            requestPkt.LobbyNumber = 0;
+            
+            PostSendPacket(PACKET_ID.REQ_LOBBY_ENTER, requestPkt.ToBytes());
+            DevLog.Write($"로비 입장 요청");
         }
 
         // 로비 나가기
         private void button5_Click(object sender, EventArgs e)
         {
-
+            PostSendPacket(PACKET_ID.REQ_LOBBY_LEAVE, null);
+            DevLog.Write($"로비 나가기 요청");
         }
 
         // 매칭 요청
         private void button6_Click(object sender, EventArgs e)
         {
+            PostSendPacket(PACKET_ID.REQ_LOBBY_MATCH, null);
+            DevLog.Write($"매칭 요청");
+        }
 
+        // 게임 서버 로그인
+        private void button7_Click(object sender, EventArgs e)
+        {
+            var requestPkt = new GameServerLoginReqPacket();
+            requestPkt.UserID = textBoxUserID.Text;
+
+            PostSendPacket(PACKET_ID.REQ_GAME_LOGIN, requestPkt.ToBytes());
+            DevLog.Write($"게임 서버 로그인 요청:  {textBoxUserID.Text}, {textBoxUserPW.Text}");
         }
     }
 }

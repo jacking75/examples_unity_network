@@ -97,6 +97,13 @@ namespace LobbyServer
             DontDestroyOnLoad(gameObject);
         }
 
+        void OnApplicationQuit()
+        {
+            Debug.Log("Close LobbyServerNetwork");
+            Network.Disconnect();
+        }
+
+
 
         bool CheckNetworkConnected()
         {

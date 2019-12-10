@@ -19,44 +19,47 @@ namespace GameNetwork
         DEV_ECHO_RES = 102,
         #endregion
 
-        LoginReq = 201,
-        LoginRes = 202,
+        REQ_GAME_LOGIN = 302,
+        RES_GAME_LOGIN = 303,
 
-        NewRoomReq = 203,
-        NewRoomRes = 204,
+        REQ_ROOM_ENTER = 306,
+        RES_ROOM_ENTER = 307,
 
-        EnterRoomReq = 206,
-        EnterRoomRes = 207,
+        REQ_ROOM_LEAVE = 311,
+        RES_ROOM_LEAVE = 312,
 
-        LeaveRoomReq = 209,
-        LeaveRoomRes = 210,
+        REQ_ROOM_CHAT = 316,
+        RES_ROOM_CHAT = 317,
+        NTF_ROOM_CHAT = 318,
 
-        ChatRoomReq = 214,
-        ChatRoomRes = 215,
-        ChatRoomNtf = 216,
+        REQ_GAME_START = 321,
+        RES_GAME_START = 322,
+        NTF_GAME_START = 323,
+
+        REQ_GAME_SYNC = 326,
+        NTF_GAME_SYNC = 327,
+
+        REQ_GAME_END = 341,
+        RES_GAME_END = 342,
+        NTF_GAME_END = 343,
 
         //TODO 방에서 매칭된 상대정보를 가져오는 패킷. 이후 매칭서버와 통신구조에 따라 패킷의 형식이 달라질 수 있음
-        RivalUserInfoNtf = 220,
+        //RivalUserInfoNtf = 220,
 
-        GameStartReqPkt = 301,
-        GameStartResPkt = 302,
-        GameStartNtfPkt = 303,
+        //GameStartReqPkt = 301,
+        //GameStartResPkt = 302,
+        //GameStartNtfPkt = 303,
 
-        GameSyncReqPkt = 304,
-        GameSyncNtfPkt = 305,
+        //GameSyncReqPkt = 304,
+        //GameSyncNtfPkt = 305,
 
-        GameScoreUpdateReqPkt = 306,
-        GameScoreUpdateNtfPkt = 307,
-        GameScoreUpdateResPkt = 308,
+        //GameScoreUpdateReqPkt = 306,
+        //GameScoreUpdateNtfPkt = 307,
+        //GameScoreUpdateResPkt = 308,
 
-        GameEndReqPkt = 311,
-        GameEndResPkt = 312,
-        GameEndNtfPkt = 313,
-
-
-       
-
-
+        //GameEndReqPkt = 311,
+        //GameEndResPkt = 312,
+        //GameEndNtfPkt = 313,
     }
 
     public enum ERROR_CODE : ushort
@@ -123,53 +126,33 @@ namespace GameNetwork
 
     public class LoginReqPacket
     {
-        byte[] UserID = new byte[PacketDataValue.USER_ID_LENGTH];
-        byte[] UserPW = new byte[PacketDataValue.USER_PW_LENGTH];
-
-        public void SetValue(string userID, string userPW)
-        {
-            Encoding.UTF8.GetBytes(userID).CopyTo(UserID, 0);
-            Encoding.UTF8.GetBytes(userPW).CopyTo(UserPW, 0);
-        }
-
+        public string UserID;
+                
         public byte[] ToBytes()
         {
-            List<byte> dataSource = new List<byte>();
-            dataSource.AddRange(UserID);
-            dataSource.AddRange(UserPW);
-            return dataSource.ToArray();
+            return Encoding.UTF8.GetBytes(UserID);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            UserID = Encoding.UTF8.GetString(bodyData);
         }
     }
 
     public class LoginResPacket
     {
-        public ERROR_CODE Result;
+        public Int16 Result;
 
-        public bool FromBytes(byte[] bodyData)
+        public byte[] ToBytes()
         {
-            Result = (ERROR_CODE)BitConverter.ToInt16(bodyData, 0);
-            return true;
+            return BitConverter.GetBytes(Result);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            Result = BitConverter.ToInt16(bodyData, 0);
         }
     }
-
-
-    public class RoomNewReqPacket
-    {
-    }
-
-    public class RoomNewResPacket
-    {
-        public ERROR_CODE Result;
-        public int RoomNumber;
-
-        public bool FromBytes(byte[] bodyData)
-        {
-            Result = (ERROR_CODE)BitConverter.ToInt16(bodyData, 0);
-            RoomNumber = BitConverter.ToInt32(bodyData, 2);
-            return true;
-        }
-    }
-
 
     public class RoomEnterReqPacket
     {
@@ -177,188 +160,206 @@ namespace GameNetwork
 
         public byte[] ToBytes()
         {
-            List<byte> dataSource = new List<byte>();
-            dataSource.AddRange(BitConverter.GetBytes(RoomNumber));
-            return dataSource.ToArray();
+            return BitConverter.GetBytes(RoomNumber);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            RoomNumber = BitConverter.ToInt32(bodyData, 0);
         }
     }
 
-    /*
-     * 매칭이 완료되면 게임서버에서 방을 setting해놓는데
-     * 이를 이용해서 
-     */
     public class RoomEnterResPacket
     {
-        public ERROR_CODE Result;
+        public Int16 Result;
         public string RivalUserID;
-        public bool FromBytes(byte[] bodyData)
-        {
-            Result = (ERROR_CODE)BitConverter.ToInt16(bodyData, 0);
-            RivalUserID = Encoding.ASCII.GetString(bodyData, 2, 21).Split('\0')[0];
-            Debug.Log("RivalUserID: "+ RivalUserID);
 
-            return true;
+        public byte[] ToBytes()
+        {
+            List<byte> dataSource = new List<byte>();
+            dataSource.AddRange(BitConverter.GetBytes(Result));
+            dataSource.AddRange(Encoding.UTF8.GetBytes(RivalUserID));
+
+            return dataSource.ToArray();
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            var idLen = bodyData.Length - 2;
+
+            Result = BitConverter.ToInt16(bodyData, 0);
+            RivalUserID = Encoding.UTF8.GetString(bodyData, 2, idLen);
         }
     }
 
-
-    public class RoomLeaveReqPacket
-    {
-    }
 
     public class RoomLeaveResPacket
     {
-        public ERROR_CODE Result;
+        public Int16 Result;
 
-        public bool FromBytes(byte[] bodyData)
+        public byte[] ToBytes()
         {
-            Result = (ERROR_CODE)BitConverter.ToInt16(bodyData, 0);
-            return true;
+            return BitConverter.GetBytes(Result);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            Result = BitConverter.ToInt16(bodyData, 0);
         }
     }
+
 
 
     public class RoomChatReqPacket
     {
-        public string Message;
+        public string Msg;
 
         public byte[] ToBytes()
         {
-            var message = new byte[PacketDataValue.MAX_CHAT_SIZE];
-            Encoding.Unicode.GetBytes(Message).CopyTo(message, 0);
+            return Encoding.UTF8.GetBytes(Msg);
+        }
 
-            List<byte> dataSource = new List<byte>();
-            dataSource.AddRange(message);
-
-            return dataSource.ToArray();
+        public void Decode(byte[] bodyData)
+        {
+            Msg = Encoding.UTF8.GetString(bodyData);
         }
     }
-
 
     public class RoomChatResPacket
     {
-        public ERROR_CODE Result;
-
-        public bool FromBytes(byte[] bodyData)
-        {
-            Result = (ERROR_CODE)BitConverter.ToInt16(bodyData, 0);
-            return true;
-        }
-    }
-
-    public class RoomChatNotPacket
-    {
-        public string UserID;
-        public string Message;
-
-        public bool FromBytes(byte[] bodyData)
-        {
-            UserID = Encoding.ASCII.GetString(bodyData, 0, 21).Split('\0')[0];
-            Message = Encoding.Unicode.GetString(bodyData, 21, 257).Split('\0')[0];
-
-            //UserID = (userID.Length > 0) ? userID[0] : null ;
-            //Message = (message.Length > 0) ? message[0] : null;
-
-            return true;
-        }
-    }
-
-
-    public class GameStartRequestPacket {
-    }
-
-    public class GameStartResponsePacket  {
-        public ERROR_CODE Result;
-        public bool FromBytes(byte[] bodyData)
-        {
-            Result = (ERROR_CODE)BitConverter.ToInt16(bodyData, 0);
-            return true;
-        }
-    }
-
-    public class GameStartNotifyPacket {
-
-    }
-
-
-
-    public class GameSynchronizePacket
-    {
-        public Int16[] EventRecordArr;
-        public Int32 Score;
-        public Int32 Line;
-        public Int32 Level;
-
-        public GameSynchronizePacket()
-        {
-            EventRecordArr = new Int16[6];
-
-            for (int i=0; i<6; i++) {
-             EventRecordArr[i] = (Int16)EVENT_TYPE.NONE;
-            }
-        }
+        public Int16 Result;
 
         public byte[] ToBytes()
         {
-            List<byte> dataSource = new List<byte>();
+            return BitConverter.GetBytes(Result);
+        }
 
-            foreach (Int16 Record in EventRecordArr) {
-                dataSource.AddRange(BitConverter.GetBytes(Record));
-            }
-            dataSource.AddRange(BitConverter.GetBytes(Score));
-            dataSource.AddRange(BitConverter.GetBytes(Line));
-            dataSource.AddRange(BitConverter.GetBytes(Level));
+        public void Decode(byte[] bodyData)
+        {
+            Result = BitConverter.ToInt16(bodyData, 0);
+        }
+    }
 
-            return dataSource.ToArray();
+    public class RoomChatNtfPacket
+    {
+        public string Msg;
+
+        public byte[] ToBytes()
+        {
+            return Encoding.UTF8.GetBytes(Msg);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            Msg = Encoding.UTF8.GetString(bodyData);
         }
     }
 
 
-    public class GameSynchronizeNotifyPacket
+    //REQ_GAME_START
+
+    public class GameStartResPacket
     {
-        public Int16[] EventRecordArr =  new Int16[6];
+        public Int16 Result;
+
+        public byte[] ToBytes()
+        {
+            return BitConverter.GetBytes(Result);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            Result = BitConverter.ToInt16(bodyData, 0);
+        }
+    }
+
+    //NTF_GAME_START
+
+
+    //REQ_GAME_END
+
+    public class GameEndResPacket
+    {
+        public Int16 Result;
+
+        public byte[] ToBytes()
+        {
+            return BitConverter.GetBytes(Result);
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            Result = BitConverter.ToInt16(bodyData, 0);
+        }
+    }
+
+    //NTF_GAME_END
+
+
+    public class GameSyncReqPacket
+    {
+        Int16[] EventRecordArr6 = new Int16[6];
+        Int32 Score;
+        Int32 Line;
+        Int32 Level;
+
+        public byte[] ToBytes()
+        {
+            byte[] EventRecordArr6Buf = new byte[EventRecordArr6.Length * sizeof(Int16)];
+            Buffer.BlockCopy(EventRecordArr6, 0, EventRecordArr6Buf, 0, EventRecordArr6Buf.Length);
+
+            List<byte> dataSource = new List<byte>();
+            dataSource.AddRange(EventRecordArr6Buf);
+            dataSource.AddRange(BitConverter.GetBytes(Score));
+            dataSource.AddRange(BitConverter.GetBytes(Line));
+            dataSource.AddRange(BitConverter.GetBytes(Level));
+            return dataSource.ToArray();
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            Buffer.BlockCopy(bodyData, 0, EventRecordArr6, 0, EventRecordArr6.Length);
+
+            var pos = EventRecordArr6.Length * sizeof(Int16);
+            Score = BitConverter.ToInt32(bodyData, pos);
+            pos += 4;
+            Line = BitConverter.ToInt32(bodyData, pos);
+            pos += 4;
+            Level = BitConverter.ToInt32(bodyData, pos);
+        }
+    }
+
+    public class GameSyncNtfPacket
+    {
+        public Int16[] EventRecordArr6 = new Int16[6];
         public Int32 Score;
         public Int32 Line;
         public Int32 Level;
 
-        public bool FromBytes(byte[] bodyData)
+        public byte[] ToBytes()
         {
-            String DebugString = "";
+            byte[] EventRecordArr6Buf = new byte[EventRecordArr6.Length * sizeof(Int16)];
+            Buffer.BlockCopy(EventRecordArr6, 0, EventRecordArr6Buf, 0, EventRecordArr6Buf.Length);
 
-            for (int i = 0; i < 6; i++)
-            {
-                EventRecordArr[i] = BitConverter.ToInt16(bodyData, 0 + i * 2);
-                DebugString += "{" + EventRecordArr[i] + "}  ";
-            }
-
-            //   Debug.Log(DebugString);
-            Score = BitConverter.ToInt32(bodyData, 12);
-            Line = BitConverter.ToInt32(bodyData, 16);
-            Level = BitConverter.ToInt32(bodyData, 20);
-
-            return true;
+            List<byte> dataSource = new List<byte>();
+            dataSource.AddRange(EventRecordArr6Buf);
+            dataSource.AddRange(BitConverter.GetBytes(Score));
+            dataSource.AddRange(BitConverter.GetBytes(Line));
+            dataSource.AddRange(BitConverter.GetBytes(Level));
+            return dataSource.ToArray();
         }
-    }
 
-
-
-
-    public class GameEndRequestPacket
-    {
-    }
-
-    public class GameEndResponsePacket
-    {
-        public ERROR_CODE Result;
-        public bool FromBytes(byte[] bodyData)
+        public void Decode(byte[] bodyData)
         {
-            Result = (ERROR_CODE)BitConverter.ToInt16(bodyData, 0);
-            return true;
+            Buffer.BlockCopy(bodyData, 0, EventRecordArr6, 0, EventRecordArr6.Length);
+
+            var pos = EventRecordArr6.Length * sizeof(Int16);
+            Score = BitConverter.ToInt32(bodyData, pos);
+            pos += 4;
+            Line = BitConverter.ToInt32(bodyData, pos);
+            pos += 4;
+            Level = BitConverter.ToInt32(bodyData, pos);
         }
-    }
-
-    public class GameEndNotifyPacket {
-
     }
 
 

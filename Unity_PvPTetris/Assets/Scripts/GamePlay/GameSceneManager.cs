@@ -44,8 +44,8 @@ public class GameSceneManager : MonoBehaviour
         //채팅메세지 확인.
         if (GameNetworkServer.Instance.ChatMsgQueue.Count > 0)
         {
-            RoomChatNotPacket recvMsg = GameNetworkServer.Instance.ChatMsgQueue.Dequeue();
-            chattingLog.text += "[" + recvMsg.UserID + "] " + recvMsg.Message + "\n";
+            var chatMsg = GameNetworkServer.Instance.ChatMsgQueue.Dequeue();
+            chattingLog.text += chatMsg + "\n";
         }
 
         if(isGameStart == false && GameNetworkServer.Instance.ClientStatus == GameNetworkServer.CLIENT_STATUS.GAME )
@@ -79,7 +79,7 @@ public class GameSceneManager : MonoBehaviour
 
         if(GameNetworkServer.Instance.ClientStatus == GameNetworkServer.CLIENT_STATUS.ROOM)
         {
-            GameNetworkServer.Instance.SendGameStartPacket(new GameStartRequestPacket());
+            GameNetworkServer.Instance.SendGameStartPacket();
         }
         else
         {

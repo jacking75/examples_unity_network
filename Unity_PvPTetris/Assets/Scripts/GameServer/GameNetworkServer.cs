@@ -22,7 +22,7 @@ namespace GameNetwork
         //Queue<PacketData> RecvPacketQueue = new Queue<PacketData>();
         //Queue<byte[]> SendPacketQueue = new Queue<byte[]>();
         
-        public Queue<RoomChatNotPacket> ChatMsgQueue { get; set; } = new Queue<RoomChatNotPacket>();
+        public Queue<string> ChatMsgQueue { get; set; } = new Queue<string>();
        
         //bool IsNetworkThreadRunning = false;
 
@@ -89,6 +89,12 @@ namespace GameNetwork
             //ProcessReceivedPacketThread.Start();
         }
 
+        void OnApplicationQuit()
+        {
+            Debug.Log("Close GameServerNetwork");
+            Disconnect();
+        }
+
         public void StopAllNetWorkThread()
         {
             //NetworkReadThread.Join();
@@ -115,12 +121,16 @@ namespace GameNetwork
             }
         }
 
-        public void RequestLogin(string loginID, string loginPW) {
-            var request = new LoginReqPacket();
-            request.SetValue(loginID, loginPW);
-            var bodyData = request.ToBytes();
+        public void RequestLogin(string loginID, string loginPW) 
+        {
             UserID = loginID;
-            PostSendPacket(PACKET_ID.LoginReq, bodyData);
+
+            var request = new LoginReqPacket();
+            request.UserID = loginID;
+            
+            var bodyData = request.ToBytes();
+            
+            PostSendPacket(PACKET_ID.REQ_GAME_LOGIN, bodyData);
         }
 
 
@@ -131,7 +141,7 @@ namespace GameNetwork
                 var request = new RoomEnterReqPacket();
                 request.RoomNumber = RoomID;
                 var bodyData = request.ToBytes();
-                PostSendPacket(PACKET_ID.EnterRoomReq, bodyData);
+                PostSendPacket(PACKET_ID.REQ_ROOM_ENTER, bodyData);
             }
             else
             {
@@ -143,30 +153,27 @@ namespace GameNetwork
         public void RequestChatMsg(string Msg)
         {
             var request = new RoomChatReqPacket();
-            request.Message = Msg;
+            request.Msg = Msg;
             var bodyData = request.ToBytes();
-            PostSendPacket(PACKET_ID.ChatRoomReq, bodyData);
+            PostSendPacket(PACKET_ID.REQ_ROOM_CHAT, bodyData);
         }
 
 
         // 게임플레이 네트워크 부분
-        public void SendGameStartPacket(GameStartRequestPacket packet)
+        public void SendGameStartPacket()
         {
-            var request = packet;
-            PostSendPacket(PACKET_ID.GameStartReqPkt, null);
+            PostSendPacket(PACKET_ID.REQ_GAME_START, null);
         }
 
-        public void SendSynchronizePacket(GameSynchronizePacket packet)
+        public void SendSynchronizePacket(GameSyncReqPacket packet)
         {
-            var request = packet;
-            var bodyData = request.ToBytes();
-            PostSendPacket(PACKET_ID.GameSyncReqPkt, bodyData);
+            var bodyData = packet.ToBytes();
+            PostSendPacket(PACKET_ID.REQ_GAME_SYNC, bodyData);
          }
 
-        public void SendGameEndPacket(GameEndRequestPacket packet)
+        public void SendGameEndPacket()
         {
-            var request = packet;
-            PostSendPacket(PACKET_ID.GameEndReqPkt, null);
+            PostSendPacket(PACKET_ID.REQ_GAME_END, null);
         }
 
 

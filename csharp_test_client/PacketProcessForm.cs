@@ -15,11 +15,24 @@ namespace csharp_test_client
             PacketFuncDic.Add(PACKET_ID.PACKET_ID_ECHO, PacketProcess_Echo);
             PacketFuncDic.Add(PACKET_ID.PACKET_ID_SIMPLE_CHAT, PacketProcess_SimpleChat);
 
-            PacketFuncDic.Add(PACKET_ID.RES_LOBBY_LOGIN, PacketProcess_LoginResponse);
-            PacketFuncDic.Add(PACKET_ID.RES_ROOM_ENTER, PacketProcess_RoomEnterResponse);
-            PacketFuncDic.Add(PACKET_ID.RES_ROOM_LEAVE, PacketProcess_RoomLeaveResponse);
-            PacketFuncDic.Add(PACKET_ID.RES_ROOM_CHAT, PacketProcess_RoomChatResponse);            
-            PacketFuncDic.Add(PACKET_ID.NTF_ROOM_CHAT, PacketProcess_RoomChatNotify);            
+            PacketFuncDic.Add(PACKET_ID.RES_LOBBY_LOGIN, PacketProcess_LoginRes);
+            PacketFuncDic.Add(PACKET_ID.RES_LOBBY_ENTER, PacketProcess_LobbyEnterRes);
+            PacketFuncDic.Add(PACKET_ID.RES_LOBBY_LEAVE, PacketProcess_LobbyLeaveRes);
+            PacketFuncDic.Add(PACKET_ID.RES_LOBBY_CHAT, PacketProcess_LobbyChatRes);
+            PacketFuncDic.Add(PACKET_ID.NTF_LOBBY_CHAT, PacketProcess_LobbyChatNotify);
+            PacketFuncDic.Add(PACKET_ID.RES_LOBBY_MATCH, PacketProcess_LobbyMatchRes);
+            PacketFuncDic.Add(PACKET_ID.NTF_LOBBY_MATCH, PacketProcess_LobbyMatchNotify);
+
+            PacketFuncDic.Add(PACKET_ID.RES_GAME_LOGIN, PacketProcess_GameLoginRes);
+            PacketFuncDic.Add(PACKET_ID.RES_ROOM_ENTER, PacketProcess_RoomEnterRes);
+            PacketFuncDic.Add(PACKET_ID.RES_ROOM_LEAVE, PacketProcess_RoomLeaveRes);
+            PacketFuncDic.Add(PACKET_ID.RES_ROOM_CHAT, PacketProcess_RoomChatRes);          
+            PacketFuncDic.Add(PACKET_ID.NTF_ROOM_CHAT, PacketProcess_RoomChatNotify);
+            PacketFuncDic.Add(PACKET_ID.RES_GAME_START, PacketProcess_GameStartRes);
+            PacketFuncDic.Add(PACKET_ID.NTF_GAME_START, PacketProcess_GameStartNotify);
+            PacketFuncDic.Add(PACKET_ID.NTF_GAME_SYNC, PacketProcess_GameSyncNotify);
+            PacketFuncDic.Add(PACKET_ID.RES_GAME_END, PacketProcess_GameEndRes);
+            PacketFuncDic.Add(PACKET_ID.NTF_GAME_END, PacketProcess_GameEndNotify);
         }
 
         void PacketProcess(NetLib.PacketData packet)
@@ -58,7 +71,7 @@ namespace csharp_test_client
         }
 
 
-        void PacketProcess_LoginResponse(byte[] bodyData)
+        void PacketProcess_LoginRes(byte[] bodyData)
         {
             //var responsePkt = new LoginResPacket();
             //responsePkt.FromBytes(bodyData);
@@ -67,7 +80,7 @@ namespace csharp_test_client
         }
 
 
-        void PacketProcess_RoomEnterResponse(byte[] bodyData)
+        void PacketProcess_RoomEnterRes(byte[] bodyData)
         {
             //var responsePkt = new RoomEnterResPacket();
             //responsePkt.FromBytes(bodyData);
@@ -99,7 +112,7 @@ namespace csharp_test_client
         }
 
 
-        void PacketProcess_RoomLeaveResponse(byte[] bodyData)
+        void PacketProcess_RoomLeaveRes(byte[] bodyData)
         {
             //var responsePkt = new RoomLeaveResPacket();
             //responsePkt.FromBytes(bodyData);
@@ -118,7 +131,7 @@ namespace csharp_test_client
         }
 
 
-        void PacketProcess_RoomChatResponse(byte[] bodyData)
+        void PacketProcess_RoomChatRes(byte[] bodyData)
         {
             //var responsePkt = new RoomChatResPacket();
             //responsePkt.FromBytes(bodyData);

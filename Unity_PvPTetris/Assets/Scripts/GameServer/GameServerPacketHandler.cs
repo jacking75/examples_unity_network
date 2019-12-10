@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace GameNetwork
 {
@@ -9,49 +10,49 @@ namespace GameNetwork
             var packetType = (PACKET_ID)packet.PacketID;
 
             switch (packetType)  {
-                case PACKET_ID.LoginRes:
+                case PACKET_ID.RES_GAME_LOGIN:
                     {
                         ProcessLoginResponse(packet);
                         break;
                     }
 
-                case PACKET_ID.EnterRoomRes:
+                case PACKET_ID.RES_ROOM_ENTER:
                     {
                         ProcessEnterRoomResponse(packet);
                         break;
                     }
 
-                case PACKET_ID.ChatRoomNtf:
+                case PACKET_ID.NTF_ROOM_CHAT:
                     {
                         ProcessChatRoomNotify(packet);
                         break;
                     }
 
-                case PACKET_ID.GameStartResPkt:
+                case PACKET_ID.RES_GAME_START:
                     {
                         ProcessGameStartResponse(packet);
                         break;
                     }
 
-                case PACKET_ID.GameStartNtfPkt:
+                case PACKET_ID.NTF_GAME_START:
                     {
                         ProcessGameStartNotify(packet);
                         break;
                     }
 
-                case PACKET_ID.GameSyncNtfPkt:
+                case PACKET_ID.NTF_GAME_SYNC:
                     {
                         ProcessGameSyncNotify(packet);
                         break;
                     }
 
-                case PACKET_ID.GameEndResPkt:
+                case PACKET_ID.RES_GAME_END:
                     {
                         ProcessGameEndResponse(packet);
                         break;
                     }
 
-                case PACKET_ID.GameEndNtfPkt:
+                case PACKET_ID.NTF_GAME_END:
                     {
                         ProcessGameEndNotify(packet);
                         break;  
@@ -64,9 +65,9 @@ namespace GameNetwork
         static void ProcessLoginResponse(NetLib.PacketData packet)
         {
             var response = new LoginResPacket();
-            response.FromBytes(packet.BodyData);
+            response.Decode(packet.BodyData);
 
-            if (response.Result == ERROR_CODE.NONE)
+            if (response.Result == (Int16)ERROR_CODE.NONE)
             {
                 Debug.Log("로그인성공");
                 GameNetworkServer.Instance.ClientStatus = GameNetworkServer.CLIENT_STATUS.LOGIN;
@@ -81,10 +82,10 @@ namespace GameNetwork
         static void ProcessEnterRoomResponse(NetLib.PacketData packet)
         {
             var response = new RoomEnterResPacket();
-            response.FromBytes(packet.BodyData);
+            response.Decode(packet.BodyData);
             LobbySceneManager.roomEnterRes.Result = response.Result;
 
-            if (response.Result == ERROR_CODE.NONE)
+            if (response.Result == (Int16)ERROR_CODE.NONE)
             {
                 Debug.Log("방 입장성공");
                 GameNetworkServer.Instance.ClientStatus = GameNetworkServer.CLIENT_STATUS.ROOM;
@@ -104,30 +105,30 @@ namespace GameNetwork
 
         static void ProcessChatRoomNotify(NetLib.PacketData packet)
         {
-            var response = new RoomChatNotPacket();
-            response.FromBytes(packet.BodyData);
-            GameNetworkServer.Instance.ChatMsgQueue.Enqueue(response);
+            var response = new RoomChatNtfPacket();
+            response.Decode(packet.BodyData);
+            GameNetworkServer.Instance.ChatMsgQueue.Enqueue(response.Msg);
         }
 
 
         static void ProcessGameStartResponse(NetLib.PacketData packet)
         {
-            var response = new GameStartResponsePacket();
-            response.FromBytes(packet.BodyData);
+            var response = new GameStartResPacket();
+            response.Decode(packet.BodyData);
             //TODO Result에 따른 처리 구현하기
         }
 
         static void ProcessGameStartNotify(NetLib.PacketData packet)
         {
-           var response = new GameStartNotifyPacket();
-            GameNetworkServer.Instance.ClientStatus = GameNetworkServer.CLIENT_STATUS.GAME;
+           GameNetworkServer.Instance.ClientStatus = GameNetworkServer.CLIENT_STATUS.GAME;
+            
             Spawner.isGameStart = true;
         }
 
         static void ProcessGameSyncNotify(NetLib.PacketData packet)
         {
-            var response = new GameSynchronizeNotifyPacket();
-            response.FromBytes(packet.BodyData);
+            var response = new GameSyncNtfPacket();
+            response.Decode(packet.BodyData);
             
             if (ShadowGrid.RecvSyncPacketQueue != null)
             {
@@ -137,8 +138,8 @@ namespace GameNetwork
 
         static void ProcessGameEndResponse(NetLib.PacketData packet)
         {
-            var response = new GameEndResponsePacket();
-            response.FromBytes(packet.BodyData);
+            var response = new GameEndResPacket();
+            response.Decode(packet.BodyData);
             //TODO Result에 따른 처리 구현하기
         }
 

@@ -78,6 +78,12 @@ namespace LobbyServer
                     ResponseGameStartToClient(sessionID, ERROR_CODE.ROOM_ENTER_INVALID_ROOM_USER_COUNT);
                 }
 
+                var rivalUserID = "empty";
+                if(room.CurrentUserCount() == 1)
+                {
+                    rivalUserID = room.FirstUserID();
+                }
+
                 if (room.AddUser(user.ID, sessionID) == false)
                 {
                     ResponseRoomEnterToClient(sessionID, ERROR_CODE.ROOM_ENTER_FAIL_ADD_USER);
@@ -87,7 +93,7 @@ namespace LobbyServer
 
                 user.EnteredLobby(reqData.RoomNumber);
 
-                ResponseRoomEnterToClient(sessionID, ERROR_CODE.NONE);
+                ResponseRoomEnterToClient(sessionID, ERROR_CODE.NONE, rivalUserID);
 
                 GameServer.MainLogger.Debug("RequestRoomEnter - Success");
             }
@@ -307,11 +313,12 @@ namespace LobbyServer
             return (true, room, roomUser);
         }
 
-        void ResponseRoomEnterToClient(string sessionID, ERROR_CODE errorCode)
+        void ResponseRoomEnterToClient(string sessionID, ERROR_CODE errorCode, string rivalUserID="empty")
         {
             var responsePkt = new RoomEnterResPacket()
             {
-                Result = (short)errorCode
+                Result = (short)errorCode,
+                RivalUserID = rivalUserID
             };
 
             ServerNetwork.SendData(sessionID, (UInt16)CL_PACKET_ID.RES_ROOM_ENTER, responsePkt.ToBytes());

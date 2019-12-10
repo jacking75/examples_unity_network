@@ -7,10 +7,10 @@ using System;
 public class ShadowGrid : MonoBehaviour
 {
     public static GameObject ShadowGridStart;
-    public static Queue<GameSynchronizeNotifyPacket> RecvSyncPacketQueue;
+    public static Queue<GameSyncNtfPacket> RecvSyncPacketQueue;
 
     public ShadowGroup[] shadowgroups;
-    GameSynchronizeNotifyPacket RecvSyncPacket;
+    GameSyncNtfPacket RecvSyncPacket;
     public static Single GetPacketTime { get; set; } = 0;
     Single PacketSimulTimeFrame = 0;
 
@@ -21,7 +21,7 @@ public class ShadowGrid : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        RecvSyncPacketQueue = new Queue<GameSynchronizeNotifyPacket>();
+        RecvSyncPacketQueue = new Queue<GameSyncNtfPacket>();
     }
 
     // Update is called once per frame
@@ -39,7 +39,7 @@ public class ShadowGrid : MonoBehaviour
             PacketSimulTimeFrame = Time.time - GetPacketTime;
             //  Debug.Log("PacketSimulTimeFrame"+PacketSimulTimeFrame);
             //  EVENT_TYPE recordEventType = (EVENT_TYPE)RecvSyncPacket.EventRecordArr[EventProcessIdx].EventType;
-            EVENT_TYPE recordEventType = (EVENT_TYPE)RecvSyncPacket.EventRecordArr[EventProcessIdx];
+            EVENT_TYPE recordEventType = (EVENT_TYPE)RecvSyncPacket.EventRecordArr6[EventProcessIdx];
             while (recordEventType == EVENT_TYPE.NONE && EventProcessIdx < 6)
             {
                 EventProcessIdx++;
@@ -47,7 +47,7 @@ public class ShadowGrid : MonoBehaviour
                 {
                     break;
                 }
-                recordEventType = (EVENT_TYPE)RecvSyncPacket.EventRecordArr[EventProcessIdx];
+                recordEventType = (EVENT_TYPE)RecvSyncPacket.EventRecordArr6[EventProcessIdx];
             }
 
             if (recordEventType != EVENT_TYPE.NONE && EventProcessIdx < 6)

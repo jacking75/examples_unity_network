@@ -46,6 +46,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.Room = new System.Windows.Forms.GroupBox();
+            this.button7 = new System.Windows.Forms.Button();
             this.btnRoomRelay = new System.Windows.Forms.Button();
             this.btnRoomChat = new System.Windows.Forms.Button();
             this.textBoxRoomSendMsg = new System.Windows.Forms.TextBox();
@@ -60,7 +61,6 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
             this.groupBox5.SuspendLayout();
             this.Room.SuspendLayout();
             this.SuspendLayout();
@@ -211,7 +211,7 @@
             // 
             // textBoxUserPW
             // 
-            this.textBoxUserPW.Location = new System.Drawing.Point(225, 133);
+            this.textBoxUserPW.Location = new System.Drawing.Point(222, 133);
             this.textBoxUserPW.MaxLength = 6;
             this.textBoxUserPW.Name = "textBoxUserPW";
             this.textBoxUserPW.Size = new System.Drawing.Size(31, 22);
@@ -222,7 +222,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(153, 137);
+            this.label2.Location = new System.Drawing.Point(149, 137);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 14);
             this.label2.TabIndex = 44;
@@ -233,9 +233,9 @@
             this.button2.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.button2.Location = new System.Drawing.Point(263, 129);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(66, 28);
+            this.button2.Size = new System.Drawing.Size(107, 28);
             this.button2.TabIndex = 46;
-            this.button2.Text = "Login";
+            this.button2.Text = "Lobby Login";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -259,6 +259,17 @@
             this.Room.TabStop = false;
             this.Room.Text = "Room";
             // 
+            // button7
+            // 
+            this.button7.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.button7.Location = new System.Drawing.Point(306, 21);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(146, 28);
+            this.button7.TabIndex = 52;
+            this.button7.Text = "게임 서버 로그인";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // btnRoomRelay
             // 
             this.btnRoomRelay.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -268,7 +279,7 @@
             this.btnRoomRelay.TabIndex = 54;
             this.btnRoomRelay.Text = "게임 시작";
             this.btnRoomRelay.UseVisualStyleBackColor = true;
-            this.btnRoomRelay.Click += new System.EventHandler(this.btnRoomRelay_Click);
+            this.btnRoomRelay.Click += new System.EventHandler(this.btnGameStart_Click);
             // 
             // btnRoomChat
             // 
@@ -371,7 +382,7 @@
             // button4
             // 
             this.button4.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button4.Location = new System.Drawing.Point(361, 133);
+            this.button4.Location = new System.Drawing.Point(378, 131);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(93, 28);
             this.button4.TabIndex = 49;
@@ -382,7 +393,7 @@
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button5.Location = new System.Drawing.Point(460, 133);
+            this.button5.Location = new System.Drawing.Point(477, 131);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(101, 28);
             this.button5.TabIndex = 50;
@@ -393,23 +404,13 @@
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button6.Location = new System.Drawing.Point(362, 163);
+            this.button6.Location = new System.Drawing.Point(379, 161);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(92, 28);
             this.button6.TabIndex = 51;
             this.button6.Text = "매칭 요청";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // button7
-            // 
-            this.button7.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button7.Location = new System.Drawing.Point(306, 21);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(146, 28);
-            this.button7.TabIndex = 52;
-            this.button7.Text = "게임 서버 로그인";
-            this.button7.UseVisualStyleBackColor = true;
             // 
             // mainForm
             // 

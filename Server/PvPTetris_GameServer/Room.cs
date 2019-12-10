@@ -64,6 +64,16 @@ namespace LobbyServer
             return UserList.Find(x => x.NetSessionID == netSessionID);
         }
 
+        public string FirstUserID()
+        {
+            if(UserList.IsEmpty())
+            {
+                return "";
+            }
+
+            return UserList[0].UserID;
+        }
+
         public int CurrentUserCount()
         {
             return UserList.Count();
