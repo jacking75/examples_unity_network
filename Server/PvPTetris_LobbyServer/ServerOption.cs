@@ -39,20 +39,5 @@ namespace LobbyServer
         [Option("lobbyStartNumber", Required = true, HelpText = "Start Lobby Number")]
         public int LobbyStartNumber { get; set; } = 0;
 
-
-        [Option("mqServerAddress", Required = true, HelpText = "MQ Server Address")]
-        public string MQServerAddress { get; set; }
-
-        [Option("mqDBReqExchangeName", Required = true, HelpText = "MQ DB Request Exchange Name")]
-        public string MQDBReqExchangeName { get; set; }
-
-        [Option("mqDBResExchangeName", Required = true, HelpText = "MQ DB Response Exchange Name")]
-        public string MQDBResExchangeName { get; set; }
-
-        [Option("mqDBIndex", Required = true, HelpText = "MQ DB Index")]
-        public int MQDBIndex { get; set; } = 0;
-
-
-
     }    
 }

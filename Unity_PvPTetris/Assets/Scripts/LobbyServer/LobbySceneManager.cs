@@ -13,7 +13,8 @@ public class LobbySceneManager : MonoBehaviour
     public static bool isMatchingResArrived { get; set; } = false;
     public static bool isMatchingNtfArrived { get; set; } = false;
     public static bool isWatingEnterRoomRes { get; set; } = false;
-    private static PKTNtfLobbyMatch matchInfo;
+    
+    private static LobbyMatchNtfPacket matchInfo;
     public static RoomEnterResPacket roomEnterRes { get; set; }
 
     // Start is called before the first frame update
@@ -22,7 +23,7 @@ public class LobbySceneManager : MonoBehaviour
       //  Screen.SetResolution(1920, 1060, false);
         chatMsgInputField = GameObject.Find("ChatMsgInputField").GetComponent<InputField>();
         chattingLog = GameObject.Find("ChattingLog").GetComponent<Text>();
-        matchInfo = new PKTNtfLobbyMatch();
+        matchInfo = new LobbyMatchNtfPacket();
         roomEnterRes = new RoomEnterResPacket();
         chattingLog.text = "";
     }
@@ -31,11 +32,22 @@ public class LobbySceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var packet = LobbyNetworkServer.Instance.ReadPacket();
+        if (packet.PacketID != 0)
+        {
+            LobbyServerPacketHandler.Process(packet);
+        }
+        else if (packet.PacketID == NetLib.PacketDef.SysPacketIDDisConnectdFromServer)
+        {
+            //SetDisconnectd();
+            Debug.Log("서버와 접속 종료 !!!");
+        }
+
         //채팅메세지 확인.
         if (LobbyNetworkServer.Instance.ChatMsgQueue.Count > 0)
         {
-            PKTNtfLobbyChat recvMsg = LobbyNetworkServer.Instance.ChatMsgQueue.Dequeue();
-            chattingLog.text += "[" + recvMsg.UserID + "] " + recvMsg.ChatMessage + "\n";
+            var chatMsg = LobbyNetworkServer.Instance.ChatMsgQueue.Dequeue();
+            chattingLog.text += chatMsg + "\n";
         }
 
         if(isMatchingResArrived == true)

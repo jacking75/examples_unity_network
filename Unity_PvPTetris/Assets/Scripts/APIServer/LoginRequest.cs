@@ -27,6 +27,15 @@ public class LoginRequest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (LobbyNetworkServer.Instance.m_ClientState != CLIENT_LOBBY_STATE.LOBBY)
+        {
+            var packet = LobbyNetworkServer.Instance.ReadPacket();
+            if (packet.PacketID != 0)
+            {
+                LobbyServerPacketHandler.Process(packet);
+            }
+        }
+
         if (LobbyNetworkServer.Instance.m_ClientState == CLIENT_LOBBY_STATE.LOGIN && isLobbyRequestSended==false) 
         {
             LobbyNetworkServer.Instance.LobbyEnterRequest(0);
@@ -59,7 +68,7 @@ public class LoginRequest : MonoBehaviour
         string data = "{\"UserID\":\""+input_id+"\", \"UserPW\":\""+input_pw+"\"}";
 
         //TODO 로그인서버도 ip 받아오게 수정하기
-        StartCoroutine(Post("http://10.14.0.81:19000/api/Login", data)); 
+        StartCoroutine(Post("http://127.0.0.1:19000/api/Login", data)); 
     }
 
 

@@ -57,12 +57,15 @@ namespace GameNetwork
             }
         }
 
-        void Awake() {
+        void Awake() 
+        {
+            //TODO 주석 처리 후 문제 없으면 삭제하자
             if (instance)
             {
                 DestroyImmediate(gameObject);
                 return;
             }
+            
             instance = this;
             Init();
             DontDestroyOnLoad(gameObject);
@@ -77,27 +80,27 @@ namespace GameNetwork
             Network.Start();
             //PacketBuffer.Init((8096 * 10), PacketHeaderSize, 1024);
 
-            IsNetworkThreadRunning = true;
-            NetworkReadThread = new System.Threading.Thread(this.NetworkReadProcess);
-            NetworkReadThread.Start();
-            NetworkSendThread = new System.Threading.Thread(this.NetworkSendProcess);
-            NetworkSendThread.Start();
-            ProcessReceivedPacketThread = new System.Threading.Thread(this.ProcessReceivedPacket);
-            ProcessReceivedPacketThread.Start();
+            //IsNetworkThreadRunning = true;
+            //NetworkReadThread = new System.Threading.Thread(this.NetworkReadProcess);
+            //NetworkReadThread.Start();
+            //NetworkSendThread = new System.Threading.Thread(this.NetworkSendProcess);
+            //NetworkSendThread.Start();
+            //ProcessReceivedPacketThread = new System.Threading.Thread(this.ProcessReceivedPacket);
+            //ProcessReceivedPacketThread.Start();
         }
 
         public void StopAllNetWorkThread()
         {
-            NetworkReadThread.Join();
-            NetworkSendThread.Join();
-            ProcessReceivedPacketThread.Join();
+            //NetworkReadThread.Join();
+            //NetworkSendThread.Join();
+            //ProcessReceivedPacketThread.Join();
         }
 
         public void StartAllNetWorkThread()
         {
-            NetworkReadThread.Start();
-            NetworkSendThread.Start();
-            ProcessReceivedPacketThread.Start();
+            //NetworkReadThread.Start();
+            //NetworkSendThread.Start();
+            //ProcessReceivedPacketThread.Start();
         }
 
         //게임서버 네트워크 부분
@@ -276,14 +279,14 @@ namespace GameNetwork
         //}
 
 
-        void ProcessReceivedPacket()
-        {
-            while (IsNetworkThreadRunning)
-            {
-                System.Threading.Thread.Sleep(32);
-                ReadPacketQueueProcess();
-            }
-        }
+        //void ProcessReceivedPacket()
+        //{
+        //    while (IsNetworkThreadRunning)
+        //    {
+        //        System.Threading.Thread.Sleep(32);
+        //        ReadPacketQueueProcess();
+        //    }
+        //}
 
 
         public NetLib.PacketData ReadPacket()

@@ -1,1 +1,1 @@
-dotnet netcoreapp3.1\APIServer.dll --redisName localhost --redisAddress 127.0.0.1:6379
+dotnet netcoreapp3.1\APIServer.dll

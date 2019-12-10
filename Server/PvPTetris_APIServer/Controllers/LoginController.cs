@@ -9,14 +9,15 @@ namespace TetrisApiServer.Controllers
 {
     [Produces("application/json")]
     [Route("api/Login")]
+    [ApiController]
     public class LoginController : Controller
     {
         [HttpPost]
         public async Task<LoginRes> Process([FromBody] LoginReq request)
         {
-            //var tick = DateTime.Now.Ticks.ToString();                    
-            return new LoginRes() { Result = 0, AuthToken = "fake" };
-
+            //var tick = DateTime.Now.Ticks.ToString();              
+            var response = new LoginRes() { Result = "0", AuthToken = "fake" };
+            return response;                        
         }
 
         string CreateAuthToken()
@@ -29,13 +30,13 @@ namespace TetrisApiServer.Controllers
 
     public class LoginReq
     {
-        public string UserID;
-        public string UserPW;
+        public string UserID { get; set; }
+        public string UserPW { get; set; }
     }
 
     public class LoginRes
     {
-        public short Result;
-        public string AuthToken;
+        public string Result { get; set; }
+        public string AuthToken { get; set; }
     }
 }

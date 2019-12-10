@@ -32,7 +32,7 @@ namespace LobbyServer
 
 
 
-    // 101 ~ 200
+    // 201 ~ 300
     public enum CL_PACKET_ID : UInt16
     {
         CS_BEGIN        = 201,

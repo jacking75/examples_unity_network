@@ -19,52 +19,51 @@ namespace LobbyServer
 
     public class LobbyServerPacketHandler
     {
-        public static void Process(Byte[] data)
+        public static void Process(NetLib.PacketData packet)
         {
-            var packet = new LobbyServerPacket();
-            Int16 PacketID = BitConverter.ToInt16(data, PacketDef.PACKET_HEADER_MSGPACK_START_POS + 2);
+            var PacketID = (CL_PACKET_ID)packet.PacketID;
 
             switch (PacketID)
             {
-                case (Int16)CL_PACKET_ID.RES_LOGIN:
+                case CL_PACKET_ID.RES_LOBBY_LOGIN:
                     {
-                        ProcessResponseLogin(data);
+                        ProcessResponseLogin(packet.BodyData);
                         break;
                     }
 
-                case (Int16)CL_PACKET_ID.RES_LOBBY_ENTER:
+                case CL_PACKET_ID.RES_LOBBY_ENTER:
                     {
-                        ProcessResponseLobbyEnter(data);
+                        ProcessResponseLobbyEnter(packet.BodyData);
                         break;
                     }
 
-                case (Int16)CL_PACKET_ID.RES_LOBBY_LEAVE:
+                case CL_PACKET_ID.RES_LOBBY_LEAVE:
                     {
-                        ProcessResponseLobbyLeave(data);
+                        ProcessResponseLobbyLeave(packet.BodyData);
                         break;
                     }
 
-                case (Int16)CL_PACKET_ID.RES_LOBBY_CHAT:
+                case CL_PACKET_ID.RES_LOBBY_CHAT:
                     {
-                        ProcessResponseLobbyChat(data);
+                        ProcessResponseLobbyChat(packet.BodyData);
                         break;
                     }
 
-                case (Int16)CL_PACKET_ID.NTF_LOBBY_CHAT:
+                case CL_PACKET_ID.NTF_LOBBY_CHAT:
                     {
-                        ProcessNotifyLobbyChat(data);
+                        ProcessNotifyLobbyChat(packet.BodyData);
                         break;
                     }
 
-                case (Int16)CL_PACKET_ID.RES_LOBBY_MATCH:
+                case CL_PACKET_ID.RES_LOBBY_MATCH:
                     {
-                        ProcessResponseLobbyMatch(data);
+                        ProcessResponseLobbyMatch(packet.BodyData);
                         break;
                     }
 
-                case (Int16)CL_PACKET_ID.NTF_LOBBY_MATCH:
+                case CL_PACKET_ID.NTF_LOBBY_MATCH:
                     {
-                        ProcessNotifyLobbyMatch(data);
+                        ProcessNotifyLobbyMatch(packet.BodyData);
                         break;
                     }
             }
@@ -75,7 +74,9 @@ namespace LobbyServer
         {
             try
             {
-                var response = MessagePackSerializer.Deserialize<PKTResLobbyLogin>(data);
+                var response = new LoginResPacket();
+                response.Decode(data);
+                
                 Debug.Log("로그인패킷 도착");
                 if (response.Result == (Int16)ERROR_CODE.NONE)
                 {
@@ -98,8 +99,11 @@ namespace LobbyServer
         {
             try
             {
-                var response = MessagePackSerializer.Deserialize<PKTResLobbyEnter>(data);
+                var response = new LobbyEnterResPacket();
+                response.Decode(data);
+                
                 Debug.Log("로비입장 패킷 도착");
+                
                 if (response.Result == (Int16)ERROR_CODE.NONE)
                 {
                     LobbyNetworkServer.Instance.m_ClientState = CLIENT_LOBBY_STATE.LOBBY;
@@ -121,8 +125,11 @@ namespace LobbyServer
         {
             try
             {
-                var response = MessagePackSerializer.Deserialize<PKTResLobbyLeave>(data);
+                var response = new LobbyLeaveResPacket();
+                response.Decode(data);
+
                 Debug.Log("로비입장 퇴장패킷 도착");
+                
                 if (response.Result == (Int16)ERROR_CODE.NONE)
                 {
                     LobbyNetworkServer.Instance.m_ClientState = CLIENT_LOBBY_STATE.LOGIN;
@@ -144,8 +151,11 @@ namespace LobbyServer
         {
             try
             {
-                var response = MessagePackSerializer.Deserialize<PKTResLobbyChat>(data);
+                var response = new LobbyChatResPacket();
+                response.Decode(data);
+
                 Debug.Log("메세지 전송답변패킷 도착");
+                
                 if (response.Result != (Int16)ERROR_CODE.NONE)
                 {
                     Debug.Log("메세지 전송 실패");
@@ -161,9 +171,12 @@ namespace LobbyServer
         {
             try
             {
-                var chat = MessagePackSerializer.Deserialize<PKTNtfLobbyChat>(data);
+                var response = new LobbyChatNtfPacket();
+                response.Decode(data);
+
                 Debug.Log("채팅알림 패킷 도착");
-                LobbyNetworkServer.Instance.ChatMsgQueue.Enqueue(chat);
+                
+                LobbyNetworkServer.Instance.ChatMsgQueue.Enqueue(response.Msg);
             }
             catch (Exception e)
             {
@@ -175,8 +188,11 @@ namespace LobbyServer
         {
             try
             {
-                var response = MessagePackSerializer.Deserialize<PKTResLobbyMatch>(data);
+                var response = new LobbyMatchResPacket();
+                response.Decode(data);
+
                 Debug.Log("매칭응답 패킷 도착");
+                
                 if(response.Result == (short)ERROR_CODE.NONE)
                 {
                     LobbySceneManager.isMatchingResArrived = true;
@@ -192,15 +208,15 @@ namespace LobbyServer
         {
             try
             {
-                var response = MessagePackSerializer.Deserialize<PKTNtfLobbyMatch>(data);
+                var response = new LobbyMatchNtfPacket();
+                response.Decode(data);
+
                 Debug.Log("매칭알림 패킷 도착");
 
                 if( LobbySceneManager.FillMatchInfo(response.GameServerIP, response.GameServerPort, response.RoomNumber) == true)
                 {
                     LobbySceneManager.isMatchingNtfArrived = true;
                 }
-
-
             }
             catch (Exception e)
             {
