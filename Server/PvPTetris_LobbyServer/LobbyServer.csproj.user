@@ -4,7 +4,7 @@
     <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
     <RevDeBugCompilerPath>C:\USERS\COM2US\APPDATA\LOCAL\MICROSOFT\VISUALSTUDIO\16.0_4A8F3CBA\EXTENSIONS\LMXBFTQG.AFU\tmcc\</RevDeBugCompilerPath>
     <CustomAfterMicrosoftCommonTargets>C:\USERS\COM2US\APPDATA\LOCAL\MICROSOFT\VISUALSTUDIO\16.0_4A8F3CBA\EXTENSIONS\LMXBFTQG.AFU\tmcc\RevDeBug.ImportAfter.targets</CustomAfterMicrosoftCommonTargets>
-    <RevDeBugActive>True</RevDeBugActive>
+    <RevDeBugActive>false</RevDeBugActive>
     <SaveMetadataAsync>true</SaveMetadataAsync>
     <RevDeBugDisableNuget>true</RevDeBugDisableNuget>
     <RevDeBugMetadataPath>C:\Users\com2us\Documents\RevDeBug\LobbyServer\Metadata\\</RevDeBugMetadataPath>

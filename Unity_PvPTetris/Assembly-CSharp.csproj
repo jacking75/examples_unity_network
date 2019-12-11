@@ -78,7 +78,6 @@
     <Compile Include="Assets\Scripts\GamePlay\ShadowGrid.cs" />
     <Compile Include="Assets\Scripts\GamePlay\ShadowGroup.cs" />
     <Compile Include="Assets\Scripts\GamePlay\Spawner.cs" />
-    <Compile Include="Assets\Scripts\GameServer\ClientTCP.cs" />
     <Compile Include="Assets\Scripts\GameServer\GameNetworkServer.cs" />
     <Compile Include="Assets\Scripts\GameServer\GameServerPacket.cs" />
     <Compile Include="Assets\Scripts\GameServer\GameServerPacketHandler.cs" />
