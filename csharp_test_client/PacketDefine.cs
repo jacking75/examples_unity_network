@@ -65,7 +65,7 @@ namespace csharp_test_client
 
     public enum ERROR_CODE : Int16
     {
-        ERROR_NONE = 0,
+        NONE = 0,
 
 
 

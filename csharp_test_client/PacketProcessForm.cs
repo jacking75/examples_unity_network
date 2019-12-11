@@ -15,7 +15,7 @@ namespace csharp_test_client
             PacketFuncDic.Add(PACKET_ID.PACKET_ID_ECHO, PacketProcess_Echo);
             PacketFuncDic.Add(PACKET_ID.PACKET_ID_SIMPLE_CHAT, PacketProcess_SimpleChat);
 
-            PacketFuncDic.Add(PACKET_ID.RES_LOBBY_LOGIN, PacketProcess_LoginRes);
+            PacketFuncDic.Add(PACKET_ID.RES_LOBBY_LOGIN, PacketProcess_LobbyLoginRes);
             PacketFuncDic.Add(PACKET_ID.RES_LOBBY_ENTER, PacketProcess_LobbyEnterRes);
             PacketFuncDic.Add(PACKET_ID.RES_LOBBY_LEAVE, PacketProcess_LobbyLeaveRes);
             PacketFuncDic.Add(PACKET_ID.RES_LOBBY_CHAT, PacketProcess_LobbyChatRes);
@@ -71,113 +71,192 @@ namespace csharp_test_client
         }
 
 
-        void PacketProcess_LoginRes(byte[] bodyData)
+        void PacketProcess_LobbyLoginRes(byte[] bodyData)
         {
-            //var responsePkt = new LoginResPacket();
-            //responsePkt.FromBytes(bodyData);
+            var responsePkt = new LoginResPacket();
+            responsePkt.Decode(bodyData);
 
-            //DevLog.Write($"로그인 결과:  {(ERROR_CODE)responsePkt.Result}");
+            DevLog.Write($"로그인 결과:  {(ERROR_CODE)responsePkt.Result}");
+
+            if ((ERROR_CODE)responsePkt.Result == ERROR_CODE.NONE)
+            {
+                labelStatus.Text = "로비에 로그인 완료";
+            }
         }
 
+        void PacketProcess_LobbyEnterRes(byte[] bodyData)
+        {
+            var responsePkt = new LobbyEnterResPacket();
+            responsePkt.Decode(bodyData);
+
+            DevLog.Write($"로비 입장 결과:  {(ERROR_CODE)responsePkt.Result}");
+
+            if ((ERROR_CODE)responsePkt.Result == ERROR_CODE.NONE)
+            {
+                labelStatus.Text = "로비에 입장 완료";
+            }
+        }
+
+        void PacketProcess_LobbyLeaveRes(byte[] bodyData)
+        {
+            var responsePkt = new LobbyLeaveResPacket();
+            responsePkt.Decode(bodyData);
+
+            DevLog.Write($"로비 나가기 결과:  {(ERROR_CODE)responsePkt.Result}");
+
+            if ((ERROR_CODE)responsePkt.Result == ERROR_CODE.NONE)
+            {
+                labelStatus.Text = "로비에서 나간 상태";
+            }
+        }
+
+        void PacketProcess_LobbyChatRes(byte[] bodyData)
+        {
+            var responsePkt = new LobbyChatResPacket();
+            responsePkt.Decode(bodyData);
+
+            DevLog.Write($"로비 채팅 요청 결과:  {(ERROR_CODE)responsePkt.Result}");
+        }
+
+        void PacketProcess_LobbyChatNotify(byte[] bodyData)
+        {
+            var responsePkt = new LobbyChatNtfPacket();
+            responsePkt.Decode(bodyData);
+
+            DevLog.Write($"로비 채팅:  {responsePkt.Msg}");
+        }
+
+        void PacketProcess_LobbyMatchRes(byte[] bodyData)
+        {
+            var responsePkt = new LobbyMatchResPacket();
+            responsePkt.Decode(bodyData);
+
+            DevLog.Write($"매칭 요청 결과:  {(ERROR_CODE)responsePkt.Result}");
+
+            if ((ERROR_CODE)responsePkt.Result == ERROR_CODE.NONE)
+            {
+                labelStatus.Text = "매칭 요청 중인 상태";
+            }
+        }
+
+        void PacketProcess_LobbyMatchNotify(byte[] bodyData)
+        {
+            var responsePkt = new LobbyMatchNtfPacket();
+            responsePkt.Decode(bodyData);
+
+            DevLog.Write($"매칭 통보 받음: {responsePkt.GameServerIP}, {responsePkt.GameServerPort}");
+            labelStatus.Text = "게임 서버에 접속해야 한다";
+        }
+
+
+        void PacketProcess_GameLoginRes(byte[] bodyData)
+        {
+            var responsePkt = new GameServerLoginResPacket();
+            responsePkt.Decode(bodyData);
+
+            DevLog.Write($"게임 서버에 로그인 결과:  {(ERROR_CODE)responsePkt.Result}");
+
+            if ((ERROR_CODE)responsePkt.Result == ERROR_CODE.NONE)
+            {
+                labelStatus.Text = "게임 서버에 로그인 완료";
+            }
+        }
 
         void PacketProcess_RoomEnterRes(byte[] bodyData)
         {
-            //var responsePkt = new RoomEnterResPacket();
-            //responsePkt.FromBytes(bodyData);
+            var responsePkt = new RoomEnterResPacket();
+            responsePkt.Decode(bodyData);
 
-            //DevLog.Write($"방 입장 결과:  {(ERROR_CODE)responsePkt.Result}");
+            DevLog.Write($"게임 서버 방 입장 요청 결과:  {(ERROR_CODE)responsePkt.Result}");
+
+            if ((ERROR_CODE)responsePkt.Result == ERROR_CODE.NONE)
+            {
+                labelStatus.Text = "게임 방에 입장 완료";
+            }
         }
-
-        void PacketProcess_RoomUserListNotify(byte[] bodyData)
-        {
-            //var notifyPkt = new RoomUserListNtfPacket();
-            //notifyPkt.FromBytes(bodyData);
-
-            //for (int i = 0; i < notifyPkt.UserCount; ++i)
-            //{
-            //    AddRoomUserList(notifyPkt.UserUniqueIdList[i], notifyPkt.UserIDList[i]);
-            //}
-
-            //DevLog.Write($"방의 기존 유저 리스트 받음");
-        }
-
-        void PacketProcess_RoomNewUserNotify(byte[] bodyData)
-        {
-            //var notifyPkt = new RoomNewUserNtfPacket();
-            //notifyPkt.FromBytes(bodyData);
-
-            //AddRoomUserList(notifyPkt.UserUniqueId, notifyPkt.UserID);
-            
-            //DevLog.Write($"방에 새로 들어온 유저 받음");
-        }
-
-
+                        
         void PacketProcess_RoomLeaveRes(byte[] bodyData)
         {
-            //var responsePkt = new RoomLeaveResPacket();
-            //responsePkt.FromBytes(bodyData);
+            var responsePkt = new RoomLeaveResPacket();
+            responsePkt.Decode(bodyData);
 
-            //DevLog.Write($"방 나가기 결과:  {(ERROR_CODE)responsePkt.Result}");
+            DevLog.Write($"게임 서버 방 나가기 요청 결과:  {(ERROR_CODE)responsePkt.Result}");
+
+            if ((ERROR_CODE)responsePkt.Result == ERROR_CODE.NONE)
+            {
+                labelStatus.Text = "게임 방을 나간 상태";
+            }
         }
-
-        void PacketProcess_RoomLeaveUserNotify(byte[] bodyData)
-        {
-            //var notifyPkt = new RoomLeaveUserNtfPacket();
-            //notifyPkt.FromBytes(bodyData);
-
-            //RemoveRoomUserList(notifyPkt.UserUniqueId);
-
-            //DevLog.Write($"방에서 나간 유저 받음");
-        }
-
-
+            
         void PacketProcess_RoomChatRes(byte[] bodyData)
         {
-            //var responsePkt = new RoomChatResPacket();
-            //responsePkt.FromBytes(bodyData);
+            var responsePkt = new RoomChatResPacket();
+            responsePkt.Decode(bodyData);
 
-            //var errorCode = (ERROR_CODE)responsePkt.Result;
-            //var msg = $"방 채팅 요청 결과:  {(ERROR_CODE)responsePkt.Result}";
-            //if (errorCode == ERROR_CODE.ERROR_NONE)
-            //{
-            //    DevLog.Write(msg, LOG_LEVEL.ERROR);
-            //}
-            //else
-            //{
-            //    AddRoomChatMessageList(0, msg);
-            //}
+            DevLog.Write($"게임 서버 방 채팅 요청 결과:  {(ERROR_CODE)responsePkt.Result}");            
         }
-
-
+        
         void PacketProcess_RoomChatNotify(byte[] bodyData)
         {
-            //var responsePkt = new RoomChatNtfPacket();
-            //responsePkt.FromBytes(bodyData);
+            var responsePkt = new RoomChatNtfPacket();
+            responsePkt.Decode(bodyData);
 
-            //AddRoomChatMessageList(responsePkt.UserUniqueId, responsePkt.Message);
+            AddRoomChatMessageList(responsePkt.Msg);
         }
 
-        void AddRoomChatMessageList(Int64 userUniqueId, string msgssage)
+        void PacketProcess_GameStartRes(byte[] bodyData)
         {
-            var msg = $"{userUniqueId}:  {msgssage}";
+            var responsePkt = new GameStartResPacket();
+            responsePkt.Decode(bodyData);
 
+            DevLog.Write($"게임 서버 게임 시작 요청 결과:  {(ERROR_CODE)responsePkt.Result}");
+        }
+
+        void PacketProcess_GameStartNotify(byte[] bodyData)
+        {
+            DevLog.Write("게임 서버 게임 시작 상태");
+        }
+        
+        void PacketProcess_GameSyncNotify(byte[] bodyData)
+        {
+            DevLog.Write($"GameSyncReqPacket 받음:");
+        }
+
+        void PacketProcess_GameEndRes(byte[] bodyData)
+        {
+            var responsePkt = new GameEndResPacket();
+            responsePkt.Decode(bodyData);
+
+            DevLog.Write($"게임 서버 게임 완료 요청 결과:  {(ERROR_CODE)responsePkt.Result}");
+
+            if ((ERROR_CODE)responsePkt.Result == ERROR_CODE.NONE)
+            {
+                labelStatus.Text = "게임 완료 상태";
+            }
+        }
+
+        void PacketProcess_GameEndNotify(byte[] bodyData)
+        {
+            labelStatus.Text = "게임 완료 상태";
+        }
+
+
+
+
+
+
+
+
+
+        void AddRoomChatMessageList(string msgssage)
+        {
             if (listBoxRoomChatMsg.Items.Count > 512)
             {
                 listBoxRoomChatMsg.Items.Clear();
             }
 
-            listBoxRoomChatMsg.Items.Add(msg);
+            listBoxRoomChatMsg.Items.Add(msgssage);
             listBoxRoomChatMsg.SelectedIndex = listBoxRoomChatMsg.Items.Count - 1;
-        }
-
-
-        void PacketProcess_RoomRelayNotify(byte[] bodyData)
-        {
-            //var notifyPkt = new RoomRelayNtfPacket();
-            //notifyPkt.FromBytes(bodyData);
-
-            //var stringData = Encoding.UTF8.GetString(notifyPkt.RelayData);
-            //DevLog.Write($"방에서 릴레이 받음. {notifyPkt.UserUniqueId} - {stringData}");
         }
     }
 }
