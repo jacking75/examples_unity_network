@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,49 +38,16 @@ namespace CSBaseLib
     // 1 ~ 10000
     public enum PACKETID : UInt16
     {
+        NTF_IN_CONNECT_CLIENT = 11,
+        NTF_IN_DISCONNECT_CLIENT = 12, 
+
+
         PACKET_ID_ECHO = 101,
         PACKET_ID_SIMPLE_CHAT = 103,
 
-        // 클라이언트
-        CS_BEGIN        = 1001,
-
-        REQ_LOGIN       = 1002,
-        RES_LOGIN       = 1003,
-        NTF_MUST_CLOSE       = 1005,
-
-        REQ_ROOM_ENTER = 1015,
-        RES_ROOM_ENTER = 1016,
-        NTF_ROOM_USER_LIST = 1017,
-        NTF_ROOM_NEW_USER = 1018,
-
-        REQ_ROOM_LEAVE = 1021,
-        RES_ROOM_LEAVE = 1022,
-        NTF_ROOM_LEAVE_USER = 1023,
-
-        REQ_ROOM_CHAT = 1026,
-        NTF_ROOM_CHAT = 1027,
-
-        CS_END          = 1100,
-
-
-        // 시스템, 서버 - 서버
-        SS_START    = 8001,
-
-        NTF_IN_CONNECT_CLIENT = 8011,
-        NTF_IN_DISCONNECT_CLIENT = 8012,
-
-        REQ_SS_SERVERINFO = 8021,
-        RES_SS_SERVERINFO = 8023,
-
-        REQ_IN_ROOM_ENTER = 8031,
-        RES_IN_ROOM_ENTER = 8032,
-
-        NTF_IN_ROOM_LEAVE = 8036,
-
-
-        // DB 8101 ~ 9000
-        REQ_DB_LOGIN = 8101,
-        RES_DB_LOGIN = 8102,
+        PACKET_ID_CHAT_REQ = 105,
+        PACKET_ID_CHAT_NTF = 106,
+                
     }
 
 
@@ -126,4 +94,23 @@ namespace CSBaseLib
             Buffer.BlockCopy(bodyData, 0, Data, 5, bodyData.Length);
         }
     }
+
+
+    public class MakePacket
+    {
+        static public byte[] Create(PACKETID packetId, byte[] bodyData)
+        {
+            var totalSize = (UInt16)(PacketDef.PACKET_HEADER_SIZE + bodyData.Length);
+            var packetIDbuf = BitConverter.GetBytes((UInt16)packetId);
+
+            var packet = new byte[PacketDef.PACKET_HEADER_SIZE + bodyData.Length];
+
+            Buffer.BlockCopy(BitConverter.GetBytes(totalSize), 0, packet, 0, 2);
+            Buffer.BlockCopy(packetIDbuf, 0, packet, 2, 2);
+            Buffer.BlockCopy(bodyData, 0, packet, 5, bodyData.Length);
+
+            return packet;
+        }
+    }
+
 }

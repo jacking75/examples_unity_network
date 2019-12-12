@@ -11,6 +11,7 @@ using SuperSocket.SocketBase.Protocol;
 using SuperSocket.SocketEngine;
 
 using CSBaseLib;
+using MessagePack;
 
 
 //TODO 1. 주기적으로 접속한 세션이 패킷을 주고 받았는지 조사(좀비 클라이언트 검사)
@@ -174,6 +175,18 @@ namespace ChatServer
                 }
 
                 return;
+            }
+            else if (reqInfo.PacketID == (UInt16)CSBaseLib.PACKETID.PACKET_ID_CHAT_REQ)
+            {
+                var responsePkt = MessagePackSerializer.Deserialize<CSMsgPackPacket.ChatReqPkt>(reqInfo.Body);
+
+                var requestPkt = new CSMsgPackPacket.ChatReqPkt();
+                requestPkt.UserID = responsePkt.UserID;
+                requestPkt.Msg = responsePkt.Msg;
+
+                byte[] buffer = MessagePackSerializer.Serialize(requestPkt);
+                var sendPacket = MakePacket.Create(CSBaseLib.PACKETID.PACKET_ID_CHAT_NTF, buffer);
+                session.Send(sendPacket, 0, sendPacket.Length);
             }
 
             var packet = new ServerPacketData();
