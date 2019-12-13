@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+
+package CSMsgPackPacket;
+
+message ChatReqPkt {
+  string UserID = 1;
+  string Msg = 2;
+}
+
+message ChatNtfPkt {
+  string UserID = 1;
+  string Msg = 2;
+}
