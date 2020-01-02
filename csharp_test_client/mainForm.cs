@@ -12,7 +12,7 @@ namespace csharp_test_client
 {
     public partial class mainForm : Form
     {
-        NetLib.TransportTCP TcpTransport = new NetLib.TransportTCP();
+        ClientNetLib.TransportTCP TcpTransport = new ClientNetLib.TransportTCP();
 
         bool IsBackGroundProcessRunning = false;
 
@@ -27,8 +27,7 @@ namespace csharp_test_client
         private void mainForm_Load(object sender, EventArgs e)
         {
             TcpTransport.DebugPrintFunc = WriteDebugLog;
-            TcpTransport.Start();
-
+            
             IsBackGroundProcessRunning = true;
             dispatcherUITimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherUITimer.Tick += new EventHandler(Update);
@@ -73,7 +72,7 @@ namespace csharp_test_client
                 {
                     PacketProcess(packet);
                 }
-                else if (packet.PacketID == NetLib.PacketDef.SysPacketIDDisConnectdFromServer)
+                else if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
                 {
                     SetDisconnectd();
                     DevLog.Write("서버와 접속 종료 !!!", LOG_LEVEL.INFO);
@@ -148,7 +147,7 @@ namespace csharp_test_client
             {
                 bodyDataSize = (Int16)bodyData.Length;
             }
-            var packetSize = bodyDataSize + NetLib.PacketDef.PACKET_HEADER_SIZE;
+            var packetSize = bodyDataSize + ClientNetLib.PacketDef.PACKET_HEADER_SIZE;
 
             List<byte> dataSource = new List<byte>();
             dataSource.AddRange(BitConverter.GetBytes((UInt16)packetSize));

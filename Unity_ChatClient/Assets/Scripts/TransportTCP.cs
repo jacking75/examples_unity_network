@@ -4,60 +4,48 @@ using System.Net.Sockets;
 using System.Threading;
 
 
-namespace NetLib
+namespace ClientNetLib
 {
 	public class TransportTCP
 	{		
 		// 클라이언트와의 접속용 소켓.
 		private Socket TcpSocket = null;
 
-		// 송신 버퍼.
-		//private PacketQueue m_sendQueue;
-		// 수신 버퍼.
-		//private PacketQueue m_recvQueue;
 		System.Collections.Concurrent.ConcurrentQueue<byte[]> SendQueue = new System.Collections.Concurrent.ConcurrentQueue<byte[]>();
 		System.Collections.Concurrent.ConcurrentQueue<byte[]> RecvQueue = new System.Collections.Concurrent.ConcurrentQueue<byte[]>();
 
-		PacketBufferManager PacketBuffer = new PacketBufferManager();
+		PacketBufferManager PacketBuffer = null;
 
 		// 접속 플래그.
 		public bool IsConnected { get; private set; } = false;
-
-		
-		// 이벤트 통지 델리게이트.
-		public delegate void EventHandler(NetEventState state);
-
-		//private EventHandler m_handler;
-
-		
+						
 		// 스레스 실행 플래그.
 		protected bool IsRunThreadLoop = false;
 
 		protected Thread ThreadHandle = null;
 
-		private const int MtuSize = 1400;
+		private const int MtuSize = 1000;
 
 		public System.Action<string> DebugPrintFunc;
 
-
-		// Use this for initialization
-		public void Start()
-		{			
-			PacketBuffer.Init(8096, PacketDef.PACKET_HEADER_SIZE, 1024);
-		}
-
-				
+								
 		// 접속.
 		public bool Connect(string address, int port)
 		{
 			DebugPrintFunc("TransportTCP connect called.");
 
+			if (PacketBuffer == null)
+			{
+				PacketBuffer = new PacketBufferManager();
+				PacketBuffer.Init((MtuSize * 8), PacketDef.PACKET_HEADER_SIZE, MtuSize);
+			}
+
 			bool ret = false;
 			try
 			{
 				TcpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-				TcpSocket.NoDelay = true;
-				TcpSocket.SendBufferSize = 0;
+				//TcpSocket.NoDelay = true;
+				//TcpSocket.SendBufferSize = 16800;
 				TcpSocket.Connect(address, port);
 				ret = LaunchThread();
 			}
@@ -76,7 +64,7 @@ namespace NetLib
 				IsConnected = false;
 				DebugPrintFunc("Connect fail");
 			}
-						
+
 			return IsConnected;
 		}
 
@@ -93,7 +81,46 @@ namespace NetLib
 				TcpSocket.Shutdown(SocketShutdown.Both);
 				TcpSocket.Close();
 				TcpSocket = null;
+			}						
+		}
+
+
+		// 애플리케이션 레이어에서 호출해야 한다. 메인 스레드에서 호출한다
+		public PacketData GetPacket()
+		{
+			var packet = new PacketData();
+			const Int16 PacketHeaderSize = PacketDef.PACKET_HEADER_SIZE;
+
+			byte[] buffer = null;
+			var result = Receive(out buffer);
+			if (result == false)
+			{
+				return packet;
 			}
+
+			if (buffer.Length > 1)
+			{
+				PacketBuffer.Write(buffer, 0, buffer.Length);
+
+				var data = PacketBuffer.Read();
+				if (data.Count < 1)
+				{
+					return packet;
+				}
+
+
+				packet.DataSize = (UInt16)(data.Count - PacketHeaderSize);
+				packet.PacketID = BitConverter.ToUInt16(data.Array, data.Offset + 2);
+				packet.Type = (SByte)data.Array[(data.Offset + 4)];
+				packet.BodyData = new byte[packet.DataSize];
+				Buffer.BlockCopy(data.Array, (data.Offset + PacketHeaderSize), packet.BodyData, 0, (data.Count - PacketHeaderSize));
+
+				return packet;
+			}
+
+			// 서버에서 접속을 종료하였음을 알린다.
+			packet.PacketID = PacketDef.SysPacketIDDisConnectdFromServer;
+			return packet;
 		}
 
 		// 송신처리.
@@ -102,13 +129,13 @@ namespace NetLib
 			SendQueue.Enqueue(data);
 		}
 
+
 		// 수신처리.
-		public bool Receive(out byte[] buffer)
+		bool Receive(out byte[] buffer)
 		{
 			return RecvQueue.TryDequeue(out buffer);
 		}
-
-		
+				
 		// 스레드 실행 함수.
 		bool LaunchThread()
 		{
@@ -183,7 +210,7 @@ namespace NetLib
 				byte[] buffer = new byte[MtuSize];
 
 				while (TcpSocket.Poll(0, SelectMode.SelectRead))
-				{				
+				{
 					int recvSize = TcpSocket.Receive(buffer, buffer.Length, SocketFlags.None);
 					if (recvSize == 0)
 					{
@@ -205,48 +232,24 @@ namespace NetLib
 			{
 				return;
 			}
-		}
-
-
-		// 애플리케이션 레이어에서 호출해야 한다. 스레드 세이프하지 않다.
-		public PacketData GetPacket()
-		{
-			var packet = new PacketData();
-			const Int16 PacketHeaderSize = PacketDef.PACKET_HEADER_SIZE;
-
-			byte[] buffer = null;
-			var result = Receive(out buffer);
-			if (result == false)
-			{
-				return packet;
-			}
-
-			if (buffer.Length > 1)
-			{
-				PacketBuffer.Write(buffer, 0, buffer.Length);
-
-				var data = PacketBuffer.Read();
-				if (data.Count < 1)
-				{
-					return packet;
-				}
-
-				
-				packet.DataSize = (UInt16)(data.Count - PacketHeaderSize);
-				packet.PacketID = BitConverter.ToUInt16(data.Array, data.Offset + 2);
-				packet.Type = (SByte)data.Array[(data.Offset + 4)];
-				packet.BodyData = new byte[packet.DataSize];
-				Buffer.BlockCopy(data.Array, (data.Offset + PacketHeaderSize), packet.BodyData, 0, (data.Count - PacketHeaderSize));
-
-				return packet;
-				//DevLog.Write($"받은 데이터: {recvData.Item2}", LOG_LEVEL.INFO);
-			}
-
-			// 서버에서 접속을 종료하였음을 알린다.
-			packet.PacketID = PacketDef.SysPacketIDDisConnectdFromServer;
-			return packet;
-		}
+		}		
 	}
 
-	
+
+
+	public class PacketDef
+	{
+		public const Int16 PACKET_HEADER_SIZE = 5;
+
+		public const UInt16 SysPacketIDDisConnectdFromServer = 1;
+	}
+
+	public struct PacketData
+	{
+		public UInt16 DataSize;
+		public UInt16 PacketID;
+		public SByte Type;
+		public byte[] BodyData;
+	}
+
 }

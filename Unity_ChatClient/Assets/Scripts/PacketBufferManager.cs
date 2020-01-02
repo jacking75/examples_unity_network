@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetLib
+namespace ClientNetLib
 {
     class PacketBufferManager
     {
@@ -19,11 +19,6 @@ namespace NetLib
 
         public bool Init(int size, int headerSize, int maxPacketSize)
         {
-            if (size < (maxPacketSize * 2) || size < 1 || headerSize < 1 || maxPacketSize < 1)
-            {
-                return false;
-            }
-
             BufferSize = size;
             PacketData = new byte[size];
             PacketDataTemp = new byte[size];
@@ -66,7 +61,7 @@ namespace NetLib
                 return new ArraySegment<byte>();
             }
 
-            var packetDataSize = BitConverter.ToInt16(PacketData, ReadPos);
+            var packetDataSize = BitConverter.ToUInt16(PacketData, ReadPos);
             if (enableReadSize < packetDataSize)
             {
                 return new ArraySegment<byte>();

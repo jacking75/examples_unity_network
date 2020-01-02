@@ -35,7 +35,7 @@ namespace csharp_test_client
             PacketFuncDic.Add(PACKET_ID.NTF_GAME_END, PacketProcess_GameEndNotify);
         }
 
-        void PacketProcess(NetLib.PacketData packet)
+        void PacketProcess(ClientNetLib.PacketData packet)
         {
             var packetType = (PACKET_ID)packet.PacketID;
             //DevLog.Write("Packet Error:  PacketID:{packet.PacketID.ToString()},  Error: {(ERROR_CODE)packet.Result}");

@@ -7,7 +7,7 @@ using System.Net;
 
 public class Chat : MonoBehaviour
 {
-	private NetLib.TransportTCP m_transport;
+	private ClientNetLib.TransportTCP m_transport;
 
 
 	private ChatState m_state = ChatState.HOST_TYPE_SELECT;
@@ -61,10 +61,9 @@ public class Chat : MonoBehaviour
 		//Debug.Log(hostEntry.HostName);
 		m_hostAddress = "127.0.0.1";
 
-		m_transport = new NetLib.TransportTCP();
+		m_transport = new ClientNetLib.TransportTCP();
 		m_transport.DebugPrintFunc = Debug.Log;
-		m_transport.Start();
-
+		
 		m_message = new List<string>();
 	}
 
@@ -99,7 +98,7 @@ public class Chat : MonoBehaviour
 
 			AddMessage(ref m_message, message);
 		}
-		else if (packet.PacketID == NetLib.PacketDef.SysPacketIDDisConnectdFromServer)
+		else if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
 		{
 			AddMessage(ref m_message, "서버와 접속이 끊어졌습니다");
 		}
@@ -247,7 +246,7 @@ public class Chat : MonoBehaviour
 		{
 			bodyDataSize = (Int16)bodyData.Length;
 		}
-		var packetSize = bodyDataSize + NetLib.PacketDef.PACKET_HEADER_SIZE;
+		var packetSize = bodyDataSize + ClientNetLib.PacketDef.PACKET_HEADER_SIZE;
 
 		List<byte> dataSource = new List<byte>();
 		dataSource.AddRange(BitConverter.GetBytes((UInt16)packetSize));
