@@ -185,7 +185,7 @@ namespace LobbyServer
                 user.LobbyNetSessionID = sessionID;
                 MatchingSys.Add(user);
 
-                MatchingSys.Process();
+                MatchingSys.Process(LobbyServer.ServerOpt.GameServerIP, (UInt16)LobbyServer.ServerOpt.GameServerPort);
             }
             catch (Exception ex)
             {

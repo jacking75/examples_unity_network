@@ -22,7 +22,7 @@ public class Group : MonoBehaviour
     private static Single TimeCapture = 0;
     public static int RecordIdx { get; set; } = 0;
     public Int16 blockType { get; set; } = -1;
-    private static GameSynchronizePacket synchronizePacket { get; set; }
+    private static GameSyncReqPacket synchronizePacket { get; set; }
 
     public ShadowGroup MyShadow; 
     void Start()
@@ -30,14 +30,14 @@ public class Group : MonoBehaviour
         SyncPacketInterval = GameNetworkServer.Instance.SyncPacketInterval;
         if (synchronizePacket == null)
         {
-            synchronizePacket = new GameSynchronizePacket();
+            synchronizePacket = new GameSyncReqPacket();
         }
            
         // Default position not valid? Then it's game over
        if (!isValidGridPos())
         {
             GameObject gop = GameObject.FindGameObjectWithTag("spawner");
-            GameNetworkServer.Instance.SendGameEndPacket(new GameEndRequestPacket());
+            GameNetworkServer.Instance.SendGameEndPacket();
             gop.GetComponent<Spawner>().GameOverFn();
             Destroy(gameObject);
         }
@@ -97,7 +97,7 @@ public class Group : MonoBehaviour
 
     public void EnqueueEventToSyncPacket(Single TimeCapture, Int16 EventType)
     {
-        synchronizePacket.EventRecordArr[RecordIdx++] = EventType;
+        synchronizePacket.EventRecordArr6[RecordIdx++] = EventType;
     }
 
 
@@ -118,7 +118,7 @@ public class Group : MonoBehaviour
                 RecordIdx = 0;
                 for (int i=0; i<6; i++)
                 {
-                    synchronizePacket.EventRecordArr[i] = -1;
+                    synchronizePacket.EventRecordArr6[i] = -1;
                 }
             }
 

@@ -32,16 +32,21 @@ public class LobbySceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var packet = LobbyNetworkServer.Instance.ReadPacket();
-        if (packet.PacketID != 0)
+        var packetList = LobbyNetworkServer.Instance.ReadPacket();
+        
+        foreach (var packet in packetList)
         {
-            LobbyServerPacketHandler.Process(packet);
+            if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
+            {
+                //SetDisconnectd();
+                Debug.Log("서버와 접속 종료 !!!");
+            }
+            else
+            {
+                LobbyServerPacketHandler.Process(packet);
+            }
         }
-        else if (packet.PacketID == NetLib.PacketDef.SysPacketIDDisConnectdFromServer)
-        {
-            //SetDisconnectd();
-            Debug.Log("서버와 접속 종료 !!!");
-        }
+
 
         //채팅메세지 확인.
         if (LobbyNetworkServer.Instance.ChatMsgQueue.Count > 0)

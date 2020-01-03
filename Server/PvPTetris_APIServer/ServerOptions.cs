@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace TetrisApiServer
 {
-    public class ServerOptions
-    {
-        [Option("redisName", Required = true, HelpText = "Redis Server Name")]
-        public string RedisName { get; set; }
+    public class ServerOption
+    {        
+        [Option("lobbyServerIP", Required = true, HelpText = "Lobby Server IP")]
+        public string LobbyServerIP { get; set; }
 
-        [Option("redisAddress", Required = true, HelpText = "Redis Server Address")]
-        public string RedisAddress { get; set; }
-        
+        [Option("lobbyServerPort", Required = true, HelpText = "Lobby Server Port")]
+        public UInt16 LobbyServerPort { get; set; }
     }
 }

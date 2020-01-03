@@ -88,20 +88,23 @@ public class Chat : MonoBehaviour
 
 	void UpdateChatting()
 	{
-		var packet = m_transport.GetPacket();
+		var packetList = m_transport.GetPacket();
 
-		if (packet.PacketID == (UInt16)PACKET_ID.PACKET_ID_SIMPLE_CHAT)
+		foreach(var packet in packetList)
 		{
-			string message = System.Text.Encoding.UTF8.GetString(packet.BodyData);
-			Debug.Log("Recv data:" + message);
-			m_chatMessage += message + "   ";// + "\n";
+			if (packet.PacketID == (UInt16)PACKET_ID.PACKET_ID_SIMPLE_CHAT)
+			{
+				string message = System.Text.Encoding.UTF8.GetString(packet.BodyData);
+				Debug.Log("Recv data:" + message);
+				m_chatMessage += message + "   ";// + "\n";
 
-			AddMessage(ref m_message, message);
-		}
-		else if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
-		{
-			AddMessage(ref m_message, "서버와 접속이 끊어졌습니다");
-		}
+				AddMessage(ref m_message, message);
+			}
+			else if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
+			{
+				AddMessage(ref m_message, "서버와 접속이 끊어졌습니다");
+			}
+		}		
 	}
 
 	void UpdateLeave()

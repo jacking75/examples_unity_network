@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class UserIDInfo : MonoBehaviour
@@ -10,4 +10,6 @@ public class UserIDInfo : MonoBehaviour
     }
     public string UserID { get; set; }
     public string AuthToken { get; set; }
+    public string LobbyServerIP { get; set; }
+    public UInt16 LobbyServerPort { get; set; }
 }

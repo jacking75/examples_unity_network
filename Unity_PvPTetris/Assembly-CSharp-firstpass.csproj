@@ -311,6 +311,9 @@
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>D:/Dev/github/examples_unity_network/Unity_PvPTetris/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
+    <Reference Include="ClientNetLib">
+      <HintPath>D:/Dev/github/examples_unity_network/Unity_PvPTetris/Assets/Plugins/ClientNetLib.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib">
       <HintPath>D:/Program Files/2019.3.0f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
     </Reference>

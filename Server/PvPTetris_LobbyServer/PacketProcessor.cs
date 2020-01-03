@@ -32,7 +32,7 @@ namespace LobbyServer
         //TODO MainServer를 인자로 주지말고, func을 인자로 넘겨주는 것이 좋다
         public void CreateAndStart(List<Lobby> lobbyList, LobbyServer mainServer)
         {
-            var maxUserCount = LobbyServer.ServerOption.LobbyMaxCount * LobbyServer.ServerOption.LobbyMaxUserCount;
+            var maxUserCount = LobbyServer.ServerOpt.LobbyMaxCount * LobbyServer.ServerOpt.LobbyMaxUserCount;
             UserMgr.Init(maxUserCount);
 
             LobbyList = lobbyList;

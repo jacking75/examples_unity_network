@@ -277,6 +277,9 @@ namespace GameNetwork
 
 
     //REQ_GAME_END
+    public class GameEndRequestPacket
+    {
+    }
 
     public class GameEndResPacket
     {
@@ -298,10 +301,10 @@ namespace GameNetwork
 
     public class GameSyncReqPacket
     {
-        Int16[] EventRecordArr6 = new Int16[6];
-        Int32 Score;
-        Int32 Line;
-        Int32 Level;
+        public Int16[] EventRecordArr6 = new Int16[6];
+        public Int32 Score;
+        public Int32 Line;
+        public Int32 Level;
 
         public byte[] ToBytes()
         {

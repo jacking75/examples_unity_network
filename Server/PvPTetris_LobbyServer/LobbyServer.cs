@@ -18,7 +18,7 @@ namespace LobbyServer
 {
     public class LobbyServer : AppServer<ClientSession, EFBinaryRequestInfo>
     {
-        public static ServerOption ServerOption;
+        public static ServerOption ServerOpt;
         public static SuperSocket.SocketBase.Logging.ILog MainLogger;
 
         SuperSocket.SocketBase.Config.IServerConfig m_Config;
@@ -37,7 +37,7 @@ namespace LobbyServer
 
         public void InitConfig(ServerOption option)
         {
-            ServerOption = option;
+            ServerOpt = option;
 
             m_Config = new SuperSocket.SocketBase.Config.ServerConfig
             {

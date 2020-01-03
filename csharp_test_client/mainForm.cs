@@ -66,17 +66,20 @@ namespace csharp_test_client
                     return;
                 }
 
-                var packet = TcpTransport.GetPacket();
+                var packetList = TcpTransport.GetPacket();
 
-                if (packet.PacketID != 0)
+                foreach(var packet in packetList)
                 {
-                    PacketProcess(packet);
-                }
-                else if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
-                {
-                    SetDisconnectd();
-                    DevLog.Write("서버와 접속 종료 !!!", LOG_LEVEL.INFO);
-                }
+                    if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
+                    {
+                        SetDisconnectd();
+                        DevLog.Write("서버와 접속 종료 !!!", LOG_LEVEL.INFO);
+                    }
+                    else
+                    {
+                        PacketProcess(packet);
+                    }
+                }                
             }
             catch (Exception ex)
             {

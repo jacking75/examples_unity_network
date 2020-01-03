@@ -29,11 +29,11 @@ public class LoginRequest : MonoBehaviour
     {
         if (LobbyNetworkServer.Instance.m_ClientState != CLIENT_LOBBY_STATE.LOBBY)
         {
-            var packet = LobbyNetworkServer.Instance.ReadPacket();
-            if (packet.PacketID != 0)
+            var packetList = LobbyNetworkServer.Instance.ReadPacket();
+            foreach(var packet in packetList)
             {
                 LobbyServerPacketHandler.Process(packet);
-            }
+            }            
         }
 
         if (LobbyNetworkServer.Instance.m_ClientState == CLIENT_LOBBY_STATE.LOGIN && isLobbyRequestSended==false) 
@@ -62,13 +62,13 @@ public class LoginRequest : MonoBehaviour
 
     public void SendLoginRequest()
     {
+        var input_address = (GameObject.Find("input_apiServer_field")).GetComponent<InputField>().text;
         var input_id = (GameObject.Find("input_id_field")).GetComponent<InputField>().text;
         var input_pw = (GameObject.Find("input_pw_field")).GetComponent<InputField>().text;
 
         string data = "{\"UserID\":\""+input_id+"\", \"UserPW\":\""+input_pw+"\"}";
 
-        //TODO 로그인서버도 ip 받아오게 수정하기
-        StartCoroutine(Post("http://127.0.0.1:19000/api/Login", data)); 
+        StartCoroutine(Post($"http://{input_address}/api/Login", data)); 
     }
 
 
@@ -92,8 +92,10 @@ public class LoginRequest : MonoBehaviour
             string auth_token = result_json["authToken"].ToString();
             user_id_info.UserID = (GameObject.Find("input_id_field")).GetComponent<InputField>().text;
             user_id_info.AuthToken= auth_token;
+            user_id_info.LobbyServerIP = result_json["lobbyServerIP"].ToString();
+            user_id_info.LobbyServerPort = Convert.ToUInt16(result_json["lobbyServerPort"].ToString());
 
-            LobbyNetworkServer.Instance.LoginRequest(user_id_info.UserID, user_id_info.AuthToken);
+            LobbyNetworkServer.Instance.LoginRequest(user_id_info);
         }
     }
 

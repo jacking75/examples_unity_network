@@ -14,6 +14,8 @@ namespace TetrisApiServer
     {
         public static void Main(string[] args)
         {
+            APIServer.Init(args);
+
             BuildWebHost(args).Run();
         }
         

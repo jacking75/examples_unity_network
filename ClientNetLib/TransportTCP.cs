@@ -2,7 +2,7 @@
 using System;
 using System.Net.Sockets;
 using System.Threading;
-
+using System.Collections.Generic;
 
 namespace ClientNetLib
 {
@@ -86,41 +86,48 @@ namespace ClientNetLib
 
 
 		// 애플리케이션 레이어에서 호출해야 한다. 메인 스레드에서 호출한다
-		public PacketData GetPacket()
+		public List<PacketData> GetPacket()
 		{
-			var packet = new PacketData();
+			var packetList = new List<PacketData>();
 			const Int16 PacketHeaderSize = PacketDef.PACKET_HEADER_SIZE;
 
 			byte[] buffer = null;
 			var result = Receive(out buffer);
 			if (result == false)
 			{
-				return packet;
+				return packetList;
 			}
 
 			if (buffer.Length > 1)
 			{
 				PacketBuffer.Write(buffer, 0, buffer.Length);
 
-				var data = PacketBuffer.Read();
-				if (data.Count < 1)
+				while (true)
 				{
-					return packet;
+					var data = PacketBuffer.Read();
+					if (data.Count < 1)
+					{
+						return packetList;
+					}
+
+					var packet = new PacketData();
+					packet.DataSize = (UInt16)(data.Count - PacketHeaderSize);
+					packet.PacketID = BitConverter.ToUInt16(data.Array, data.Offset + 2);
+					packet.Type = (SByte)data.Array[(data.Offset + 4)];
+					packet.BodyData = new byte[packet.DataSize];
+					Buffer.BlockCopy(data.Array, (data.Offset + PacketHeaderSize), packet.BodyData, 0, (data.Count - PacketHeaderSize));
+					packetList.Add(packet);
 				}
-
-
-				packet.DataSize = (UInt16)(data.Count - PacketHeaderSize);
-				packet.PacketID = BitConverter.ToUInt16(data.Array, data.Offset + 2);
-				packet.Type = (SByte)data.Array[(data.Offset + 4)];
-				packet.BodyData = new byte[packet.DataSize];
-				Buffer.BlockCopy(data.Array, (data.Offset + PacketHeaderSize), packet.BodyData, 0, (data.Count - PacketHeaderSize));
-
-				return packet;
+			}
+			else
+			{
+				// 서버에서 접속을 종료하였음을 알린다.
+				var packet = new PacketData();
+				packet.PacketID = PacketDef.SysPacketIDDisConnectdFromServer;
+				packetList.Add(packet);
 			}
 
-			// 서버에서 접속을 종료하였음을 알린다.
-			packet.PacketID = PacketDef.SysPacketIDDisConnectdFromServer;
-			return packet;
+			return packetList;
 		}
 
 		// 송신처리.
@@ -214,9 +221,6 @@ namespace ClientNetLib
 					int recvSize = TcpSocket.Receive(buffer, buffer.Length, SocketFlags.None);
 					if (recvSize == 0)
 					{
-						var closedBuffer = new byte[1];
-						RecvQueue.Enqueue(buffer);
-
 						DebugPrintFunc("Disconnected recv from client.");
 						Disconnect();
 					}

@@ -5,7 +5,7 @@ namespace GameNetwork
 {
     class GameServerPacketHandler
     {
-        public static void Process(NetLib.PacketData packet)
+        public static void Process(ClientNetLib.PacketData packet)
         {
             var packetType = (PACKET_ID)packet.PacketID;
 
@@ -62,7 +62,7 @@ namespace GameNetwork
 
 
 
-        static void ProcessLoginResponse(NetLib.PacketData packet)
+        static void ProcessLoginResponse(ClientNetLib.PacketData packet)
         {
             var response = new LoginResPacket();
             response.Decode(packet.BodyData);
@@ -79,7 +79,7 @@ namespace GameNetwork
             }
         }
 
-        static void ProcessEnterRoomResponse(NetLib.PacketData packet)
+        static void ProcessEnterRoomResponse(ClientNetLib.PacketData packet)
         {
             var response = new RoomEnterResPacket();
             response.Decode(packet.BodyData);
@@ -103,7 +103,7 @@ namespace GameNetwork
             }
         }
 
-        static void ProcessChatRoomNotify(NetLib.PacketData packet)
+        static void ProcessChatRoomNotify(ClientNetLib.PacketData packet)
         {
             var response = new RoomChatNtfPacket();
             response.Decode(packet.BodyData);
@@ -111,21 +111,21 @@ namespace GameNetwork
         }
 
 
-        static void ProcessGameStartResponse(NetLib.PacketData packet)
+        static void ProcessGameStartResponse(ClientNetLib.PacketData packet)
         {
             var response = new GameStartResPacket();
             response.Decode(packet.BodyData);
             //TODO Result에 따른 처리 구현하기
         }
 
-        static void ProcessGameStartNotify(NetLib.PacketData packet)
+        static void ProcessGameStartNotify(ClientNetLib.PacketData packet)
         {
            GameNetworkServer.Instance.ClientStatus = GameNetworkServer.CLIENT_STATUS.GAME;
             
             Spawner.isGameStart = true;
         }
 
-        static void ProcessGameSyncNotify(NetLib.PacketData packet)
+        static void ProcessGameSyncNotify(ClientNetLib.PacketData packet)
         {
             var response = new GameSyncNtfPacket();
             response.Decode(packet.BodyData);
@@ -136,14 +136,14 @@ namespace GameNetwork
             }
         }
 
-        static void ProcessGameEndResponse(NetLib.PacketData packet)
+        static void ProcessGameEndResponse(ClientNetLib.PacketData packet)
         {
             var response = new GameEndResPacket();
             response.Decode(packet.BodyData);
             //TODO Result에 따른 처리 구현하기
         }
 
-        static void ProcessGameEndNotify(NetLib.PacketData packet)
+        static void ProcessGameEndNotify(ClientNetLib.PacketData packet)
         {
             Spawner.isGameEndPacketArrived = true;
             GameNetworkServer.Instance.Disconnect();

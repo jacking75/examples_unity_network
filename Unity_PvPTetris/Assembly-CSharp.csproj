@@ -81,9 +81,6 @@
     <Compile Include="Assets\Scripts\GameServer\GameNetworkServer.cs" />
     <Compile Include="Assets\Scripts\GameServer\GameServerPacket.cs" />
     <Compile Include="Assets\Scripts\GameServer\GameServerPacketHandler.cs" />
-    <Compile Include="Assets\Scripts\GameServer\NetworkDef.cs" />
-    <Compile Include="Assets\Scripts\GameServer\PacketBufferManager.cs" />
-    <Compile Include="Assets\Scripts\GameServer\TransportTCP.cs" />
     <Compile Include="Assets\Scripts\LobbyServer\CSPacketData.cs" />
     <Compile Include="Assets\Scripts\LobbyServer\CSPacketID.cs" />
     <Compile Include="Assets\Scripts\LobbyServer\LobbyNetworkServer.cs" />
@@ -446,6 +443,9 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>D:/Dev/github/examples_unity_network/Unity_PvPTetris/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll</HintPath>
+    </Reference>
+    <Reference Include="ClientNetLib">
+      <HintPath>D:/Dev/github/examples_unity_network/Unity_PvPTetris/Assets/Plugins/ClientNetLib.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>D:/Program Files/2019.3.0f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

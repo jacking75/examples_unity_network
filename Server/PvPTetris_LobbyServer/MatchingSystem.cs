@@ -7,12 +7,7 @@ namespace LobbyServer
 {
     class MatchingSystem
     {
-        string GameServerIP = "127.0.0";
-        UInt16 GameServerPort = 11021;
-
         Int32 RoomNumber = -1;
-
-        bool IsRunning = false;
 
         ConcurrentQueue<MatchUser> MatchUserQueue = new ConcurrentQueue<MatchUser>();
 
@@ -26,42 +21,38 @@ namespace LobbyServer
         }
 
 
-        public void Process()
+        public bool Process(string gameServerIP, UInt16 gameServerPort)
         {
-            var mqDataEncodingBuffer = new byte[8012];
-
-            while (IsRunning)
+            if(MatchUserQueue.Count < 2)
             {
-                if(MatchUserQueue.Count < 2)
-                {
-                    System.Threading.Thread.Sleep(1);
-                    continue;
-                }
-
-                MatchUser user1, user2;
-                if (MatchUserQueue.TryDequeue(out user1) == false)
-                {
-                    continue;
-                }
-
-                if (MatchUserQueue.TryDequeue(out user2) == false)
-                {
-                    continue;
-                }
-
-
-                MatchingComplete(user1, user2);
+                System.Threading.Thread.Sleep(1);
+                return false;
             }
+
+            MatchUser user1, user2;
+            if (MatchUserQueue.TryDequeue(out user1) == false)
+            {
+                return false;
+            }
+
+            if (MatchUserQueue.TryDequeue(out user2) == false)
+            {
+                return false;
+            }
+
+
+            MatchingComplete(user1, user2, gameServerIP, gameServerPort);
+            return true;
         }
 
-        void MatchingComplete(MatchUser user1, MatchUser user2)
+        void MatchingComplete(MatchUser user1, MatchUser user2, string gameServerIP, UInt16 gameServerPort)
         {
             // 사용할 수 있는 방을 얻는다
             ++RoomNumber;
-
+            
             // 유저들이 있는 로비서버에 통보한다
-            NotifyLobbyMatchToClient(user1.LobbyNetSessionID, GameServerIP, GameServerPort, RoomNumber);
-            NotifyLobbyMatchToClient(user2.LobbyNetSessionID, GameServerIP, GameServerPort, RoomNumber);
+            NotifyLobbyMatchToClient(user1.LobbyNetSessionID, gameServerIP, gameServerPort, RoomNumber);
+            NotifyLobbyMatchToClient(user2.LobbyNetSessionID, gameServerIP, gameServerPort, RoomNumber);
                        
         }
 

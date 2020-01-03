@@ -7,8 +7,11 @@ namespace TetrisApiServer
 {
     public class APIServer
     {
-        static public void Init(ServerOptions options)
+        public static ServerOption ServerOpt;
+
+        static public void Init(string[] args)
         {
+            ServerOpt = (CommandLine.Parser.Default.ParseArguments<ServerOption>(args) as CommandLine.Parsed<ServerOption>).Value;
         }
     }
 }

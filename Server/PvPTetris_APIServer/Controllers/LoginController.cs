@@ -16,7 +16,13 @@ namespace TetrisApiServer.Controllers
         public async Task<LoginRes> Process([FromBody] LoginReq request)
         {
             //var tick = DateTime.Now.Ticks.ToString();              
-            var response = new LoginRes() { Result = "0", AuthToken = "fake" };
+            var response = new LoginRes() 
+            { Result = "0", 
+                AuthToken = "fake",
+                LobbyServerIP = APIServer.ServerOpt.LobbyServerIP,
+                LobbyServerPort = APIServer.ServerOpt.LobbyServerPort,
+            };
+
             return response;                        
         }
 
@@ -38,5 +44,8 @@ namespace TetrisApiServer.Controllers
     {
         public string Result { get; set; }
         public string AuthToken { get; set; }
+
+        public string LobbyServerIP { get; set; }
+        public UInt16 LobbyServerPort { get; set; }
     }
 }

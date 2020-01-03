@@ -39,5 +39,11 @@ namespace LobbyServer
         [Option("lobbyStartNumber", Required = true, HelpText = "Start Lobby Number")]
         public int LobbyStartNumber { get; set; } = 0;
 
+        [Option("gameServerIP", Required = true, HelpText = "GameServer IP")]
+        public string GameServerIP { get; set; } = "";
+
+        [Option("gameServerPort", Required = true, HelpText = "GameServer Port")]
+        public int GameServerPort { get; set; } = 0;
+
     }    
 }

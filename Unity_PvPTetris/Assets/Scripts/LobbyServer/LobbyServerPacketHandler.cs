@@ -19,7 +19,7 @@ namespace LobbyServer
 
     public class LobbyServerPacketHandler
     {
-        public static void Process(NetLib.PacketData packet)
+        public static void Process(ClientNetLib.PacketData packet)
         {
             var PacketID = (CL_PACKET_ID)packet.PacketID;
 

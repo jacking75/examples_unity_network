@@ -12,9 +12,9 @@ namespace LobbyServer
 
         public void CreateRooms()
         {
-            var maxLobbyCount = LobbyServer.ServerOption.LobbyMaxCount;
-            var startNumber = LobbyServer.ServerOption.LobbyStartNumber;
-            var maxUserCount = LobbyServer.ServerOption.LobbyMaxUserCount;
+            var maxLobbyCount = LobbyServer.ServerOpt.LobbyMaxCount;
+            var startNumber = LobbyServer.ServerOpt.LobbyStartNumber;
+            var maxUserCount = LobbyServer.ServerOpt.LobbyMaxUserCount;
 
             for(int i = 0; i < maxLobbyCount; ++i)
             {
