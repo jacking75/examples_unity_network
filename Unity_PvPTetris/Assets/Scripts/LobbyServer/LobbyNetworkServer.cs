@@ -18,6 +18,7 @@ namespace LobbyServer
 
     public class LobbyNetworkServer : MonoBehaviour
     {
+        #region LobbyNetworkServer_Member
         private static LobbyNetworkServer instance = null;
         
         public string UserID { get; set; } = "";
@@ -29,8 +30,8 @@ namespace LobbyServer
         ClientNetLib.TransportTCP Network;
                 
         public Queue<string> ChatMsgQueue { get; set; } = new Queue<string>();
-        
-        
+        #endregion
+
         // Start is called before the first frame update
         void Start()
         {            
@@ -49,8 +50,7 @@ namespace LobbyServer
                         
             m_ClientState = CLIENT_LOBBY_STATE.NONE;            
         }
-
-
+        
         public static LobbyNetworkServer Instance
         {
             get
@@ -61,7 +61,6 @@ namespace LobbyServer
 
         private void Awake()
         {
-            //TODO 주석 처리 후 문제 없으면 삭제하자
             if (instance)
             {
                 DestroyImmediate(gameObject);

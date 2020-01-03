@@ -338,5 +338,12 @@ namespace csharp_test_client
             PostSendPacket(PACKET_ID.REQ_GAME_LOGIN, requestPkt.ToBytes());
             DevLog.Write($"게임 서버 로그인 요청:  {textBoxUserID.Text}, {textBoxUserPW.Text}");
         }
+
+        // 게임 종료 요청
+        private void button8_Click(object sender, EventArgs e)
+        {
+            PostSendPacket(PACKET_ID.REQ_GAME_END, null);
+            DevLog.Write($"게임 서버 - 게임 종료 요청");
+        }
     }
 }

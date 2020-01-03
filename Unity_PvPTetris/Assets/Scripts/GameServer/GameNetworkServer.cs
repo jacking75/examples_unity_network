@@ -18,9 +18,7 @@ namespace GameNetwork
         public bool GetIsConnected() { return Network.IsConnected; }
         public void Disconnect() { Network.Disconnect(); }
 
-        //System.Threading.Thread ProcessReceivedPacketThread = null;
-
-
+      
         public CLIENT_STATUS ClientStatus { get; set; } = new CLIENT_STATUS();
         public string UserID { get; set; } = "";
         public string RivalID { get; set; } = "";
@@ -46,7 +44,6 @@ namespace GameNetwork
 
         void Awake() 
         {
-            //TODO 주석 처리 후 문제 없으면 삭제하자
             if (instance)
             {
                 DestroyImmediate(gameObject);

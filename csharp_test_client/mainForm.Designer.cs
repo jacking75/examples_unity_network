@@ -61,6 +61,7 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
             this.groupBox5.SuspendLayout();
             this.Room.SuspendLayout();
             this.SuspendLayout();
@@ -193,7 +194,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 137);
+            this.label1.Location = new System.Drawing.Point(12, 127);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(55, 14);
             this.label1.TabIndex = 42;
@@ -201,7 +202,7 @@
             // 
             // textBoxUserID
             // 
-            this.textBoxUserID.Location = new System.Drawing.Point(67, 133);
+            this.textBoxUserID.Location = new System.Drawing.Point(67, 123);
             this.textBoxUserID.MaxLength = 6;
             this.textBoxUserID.Name = "textBoxUserID";
             this.textBoxUserID.Size = new System.Drawing.Size(80, 22);
@@ -211,7 +212,7 @@
             // 
             // textBoxUserPW
             // 
-            this.textBoxUserPW.Location = new System.Drawing.Point(222, 133);
+            this.textBoxUserPW.Location = new System.Drawing.Point(222, 123);
             this.textBoxUserPW.MaxLength = 6;
             this.textBoxUserPW.Name = "textBoxUserPW";
             this.textBoxUserPW.Size = new System.Drawing.Size(31, 22);
@@ -222,7 +223,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(149, 137);
+            this.label2.Location = new System.Drawing.Point(149, 127);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 14);
             this.label2.TabIndex = 44;
@@ -231,7 +232,7 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button2.Location = new System.Drawing.Point(263, 129);
+            this.button2.Location = new System.Drawing.Point(263, 119);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(107, 28);
             this.button2.TabIndex = 46;
@@ -241,6 +242,7 @@
             // 
             // Room
             // 
+            this.Room.Controls.Add(this.button8);
             this.Room.Controls.Add(this.button7);
             this.Room.Controls.Add(this.btnRoomRelay);
             this.Room.Controls.Add(this.btnRoomChat);
@@ -252,9 +254,9 @@
             this.Room.Controls.Add(this.btn_RoomEnter);
             this.Room.Controls.Add(this.textBoxRoomNumber);
             this.Room.Controls.Add(this.label3);
-            this.Room.Location = new System.Drawing.Point(15, 191);
+            this.Room.Location = new System.Drawing.Point(15, 185);
             this.Room.Name = "Room";
-            this.Room.Size = new System.Drawing.Size(566, 270);
+            this.Room.Size = new System.Drawing.Size(566, 276);
             this.Room.TabIndex = 47;
             this.Room.TabStop = false;
             this.Room.Text = "Room";
@@ -262,7 +264,7 @@
             // button7
             // 
             this.button7.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button7.Location = new System.Drawing.Point(306, 21);
+            this.button7.Location = new System.Drawing.Point(306, 16);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(146, 28);
             this.button7.TabIndex = 52;
@@ -273,7 +275,7 @@
             // btnRoomRelay
             // 
             this.btnRoomRelay.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnRoomRelay.Location = new System.Drawing.Point(458, 22);
+            this.btnRoomRelay.Location = new System.Drawing.Point(458, 15);
             this.btnRoomRelay.Name = "btnRoomRelay";
             this.btnRoomRelay.Size = new System.Drawing.Size(98, 28);
             this.btnRoomRelay.TabIndex = 54;
@@ -284,7 +286,7 @@
             // btnRoomChat
             // 
             this.btnRoomChat.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnRoomChat.Location = new System.Drawing.Point(499, 230);
+            this.btnRoomChat.Location = new System.Drawing.Point(499, 241);
             this.btnRoomChat.Name = "btnRoomChat";
             this.btnRoomChat.Size = new System.Drawing.Size(57, 28);
             this.btnRoomChat.TabIndex = 53;
@@ -294,7 +296,7 @@
             // 
             // textBoxRoomSendMsg
             // 
-            this.textBoxRoomSendMsg.Location = new System.Drawing.Point(15, 233);
+            this.textBoxRoomSendMsg.Location = new System.Drawing.Point(15, 244);
             this.textBoxRoomSendMsg.MaxLength = 32;
             this.textBoxRoomSendMsg.Name = "textBoxRoomSendMsg";
             this.textBoxRoomSendMsg.Size = new System.Drawing.Size(478, 22);
@@ -305,9 +307,9 @@
             // listBoxRoomChatMsg
             // 
             this.listBoxRoomChatMsg.FormattingEnabled = true;
-            this.listBoxRoomChatMsg.Location = new System.Drawing.Point(165, 70);
+            this.listBoxRoomChatMsg.Location = new System.Drawing.Point(165, 75);
             this.listBoxRoomChatMsg.Name = "listBoxRoomChatMsg";
-            this.listBoxRoomChatMsg.Size = new System.Drawing.Size(391, 147);
+            this.listBoxRoomChatMsg.Size = new System.Drawing.Size(391, 160);
             this.listBoxRoomChatMsg.TabIndex = 51;
             // 
             // label4
@@ -324,7 +326,7 @@
             this.listBoxRoomUserList.FormattingEnabled = true;
             this.listBoxRoomUserList.Location = new System.Drawing.Point(15, 71);
             this.listBoxRoomUserList.Name = "listBoxRoomUserList";
-            this.listBoxRoomUserList.Size = new System.Drawing.Size(140, 147);
+            this.listBoxRoomUserList.Size = new System.Drawing.Size(140, 160);
             this.listBoxRoomUserList.TabIndex = 49;
             // 
             // btn_RoomLeave
@@ -382,7 +384,7 @@
             // button4
             // 
             this.button4.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button4.Location = new System.Drawing.Point(378, 131);
+            this.button4.Location = new System.Drawing.Point(378, 121);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(93, 28);
             this.button4.TabIndex = 49;
@@ -393,7 +395,7 @@
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button5.Location = new System.Drawing.Point(477, 131);
+            this.button5.Location = new System.Drawing.Point(477, 121);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(101, 28);
             this.button5.TabIndex = 50;
@@ -404,13 +406,24 @@
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button6.Location = new System.Drawing.Point(379, 161);
+            this.button6.Location = new System.Drawing.Point(379, 151);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(92, 28);
             this.button6.TabIndex = 51;
             this.button6.Text = "매칭 요청";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button8
+            // 
+            this.button8.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.button8.Location = new System.Drawing.Point(458, 45);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(98, 28);
+            this.button8.TabIndex = 55;
+            this.button8.Text = "게임종료";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // mainForm
             // 
@@ -483,6 +496,7 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button8;
     }
 }
 
