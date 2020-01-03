@@ -1,0 +1,4 @@
+@startuml
+Client -> APIServer: (http)api/Login
+Client <- APIServer:
+@enduml

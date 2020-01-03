@@ -1,0 +1,8 @@
+@startuml
+participant Client_모두
+participant Client
+participant LobbyServer
+Client -> LobbyServer: REQ_LOBBY_CHAT
+Client <- LobbyServer: RES_LOBBY_CHAT
+Client_모두 <- LobbyServer: NTF_LOBBY_CHAT
+@enduml

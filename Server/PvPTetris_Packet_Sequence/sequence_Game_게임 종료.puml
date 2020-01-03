@@ -1,0 +1,8 @@
+@startuml
+participant Client_모두
+participant Client
+participant GameServer
+Client -> GameServer: REQ_GAME_END
+Client <- GameServer: RES_GAME_END
+Client_모두 <- GameServer: NTF_GAME_END
+@enduml

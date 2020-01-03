@@ -186,7 +186,6 @@ namespace ClientNetLib
 			DebugPrintFunc("Dispatch thread ended.");
 		}
 				
-		// 스레드 측 송신처리 .
 		void DispatchSend()
 		{
 			try
@@ -208,7 +207,6 @@ namespace ClientNetLib
 			}
 		}
 
-		// 스레드 측의 수신처리.
 		void DispatchReceive()
 		{
 			// 수신처리.

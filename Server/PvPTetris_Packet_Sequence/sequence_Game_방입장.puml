@@ -1,0 +1,4 @@
+@startuml
+Client -> GameServer: REQ_ROOM_ENTER
+Client <- GameServer: RES_ROOM_ENTER
+@enduml

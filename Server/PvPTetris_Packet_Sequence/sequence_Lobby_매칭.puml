@@ -1,0 +1,12 @@
+@startuml
+participant Client_모두
+
+Client -> LobbyServer: REQ_LOBBY_MATCH
+Client <- LobbyServer: RES_LOBBY_MATCH
+
+alt 매칭 성공 case
+Client_모두 <- LobbyServer: NTF_LOBBY_MATCH
+note right Client: 매칭 정보로 게임서버에 접속하고 방에 입장한다
+end
+
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+participant Client_모두
+participant Client
+participant GameServer
+Client -> GameServer: REQ_GAME_SYNC
+Client_모두 <- GameServer: NTF_GAME_SYNC
+@enduml

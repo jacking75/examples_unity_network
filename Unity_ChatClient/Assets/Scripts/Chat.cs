@@ -56,9 +56,6 @@ public class Chat : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		//IPHostEntry hostEntry = Dns.GetHostEntry(Dns.GetHostName());
-		//System.Net.IPAddress hostAddress = hostEntry.AddressList[0];
-		//Debug.Log(hostEntry.HostName);
 		m_hostAddress = "127.0.0.1";
 
 		m_transport = new ClientNetLib.TransportTCP();
@@ -205,8 +202,6 @@ public class Chat : MonoBehaviour
 			byte[] buffer = System.Text.Encoding.UTF8.GetBytes(message);
 			
 			PostSendPacket(PACKET_ID.PACKET_ID_SIMPLE_CHAT, buffer);
-			//m_transport.Send(buffer);
-			//AddMessage(ref m_message, message);
 			m_sendComment = "";
 		}
 

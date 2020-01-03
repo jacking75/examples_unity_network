@@ -1,0 +1,5 @@
+@startuml
+Client -> LobbyServer: REQ_LOBBY_LOGIN
+
+Client <- LobbyServer: RES_LOBBY_LOGIN
+@enduml

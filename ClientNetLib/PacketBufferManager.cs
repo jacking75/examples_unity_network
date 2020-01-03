@@ -50,7 +50,7 @@ namespace ClientNetLib
             Buffer.BlockCopy(data, pos, PacketData, WritePos, size);
             WritePos += size;
 
-            if (NextFree() == false)
+            if (IsNotEnoughSpaceLeft() == false)
             {
                 BufferRelocate();
             }
@@ -77,7 +77,7 @@ namespace ClientNetLib
             return completePacketData;
         }
 
-        bool NextFree()
+        bool IsNotEnoughSpaceLeft()
         {
             var enableWriteSize = BufferSize - WritePos;
 

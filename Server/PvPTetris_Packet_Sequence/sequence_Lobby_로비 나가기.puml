@@ -1,0 +1,4 @@
+@startuml
+Client -> LobbyServer: REQ_LOBBY_LEAVE
+Client <- LobbyServer: RES_LOBBY_LEAVE
+@enduml

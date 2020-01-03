@@ -1,0 +1,8 @@
+@startuml
+participant Client_모두
+participant Client
+participant GameServer
+Client -> GameServer: REQ_ROOM_CHAT
+Client <- GameServer: RES_ROOM_CHAT
+Client_모두 <- GameServer: NTF_ROOM_CHAT
+@enduml
