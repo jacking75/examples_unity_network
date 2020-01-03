@@ -30,16 +30,20 @@ public class GameSceneManager : MonoBehaviour
     void Update()
     {
         var packetList = GameNetworkServer.Instance.ReadPacket();
-        foreach(var packet in packetList)
+
+        if (packetList != null)
         {
-            if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
+            foreach (var packet in packetList)
             {
-                //SetDisconnectd();
-                Debug.Log("서버와 접속 종료 !!!");
-            }
-            else
-            {
-                GameServerPacketHandler.Process(packet);
+                if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
+                {
+                    //SetDisconnectd();
+                    Debug.Log("서버와 접속 종료 !!!");
+                }
+                else
+                {
+                    GameServerPacketHandler.Process(packet);
+                }
             }
         }
         

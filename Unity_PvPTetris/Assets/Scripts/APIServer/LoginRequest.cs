@@ -30,10 +30,14 @@ public class LoginRequest : MonoBehaviour
         if (LobbyNetworkServer.Instance.m_ClientState != CLIENT_LOBBY_STATE.LOBBY)
         {
             var packetList = LobbyNetworkServer.Instance.ReadPacket();
-            foreach(var packet in packetList)
+
+            if (packetList != null)
             {
-                LobbyServerPacketHandler.Process(packet);
-            }            
+                foreach (var packet in packetList)
+                {
+                    LobbyServerPacketHandler.Process(packet);
+                }
+            }
         }
 
         if (LobbyNetworkServer.Instance.m_ClientState == CLIENT_LOBBY_STATE.LOGIN && isLobbyRequestSended==false) 
