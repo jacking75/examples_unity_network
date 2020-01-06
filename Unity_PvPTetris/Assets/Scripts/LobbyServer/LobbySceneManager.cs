@@ -32,25 +32,8 @@ public class LobbySceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var packetList = LobbyNetworkServer.Instance.ReadPacket();
-
-        if (packetList != null)
-        {
-            foreach (var packet in packetList)
-            {
-                if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
-                {
-                    //SetDisconnectd();
-                    Debug.Log("서버와 접속 종료 !!!");
-                }
-                else
-                {
-                    LobbyServerPacketHandler.Process(packet);
-                }
-            }
-        }
-
-
+        ProcessLobbyPacket();
+                
         //채팅메세지 확인.
         if (LobbyNetworkServer.Instance.ChatMsgQueue.Count > 0)
         {
@@ -68,6 +51,11 @@ public class LobbySceneManager : MonoBehaviour
         {
             ProcessMatchingNotify();
             isMatchingNtfArrived = false;
+        }
+
+        if(GameNetworkServer.Instance.GetIsConnected())
+        {
+            GameNetworkServer.Instance.ProcessGameServerPacket();
         }
 
         if(GameNetworkServer.Instance.ClientStatus == GameNetworkServer.CLIENT_STATUS.LOGIN && isWatingEnterRoomRes==false)
@@ -108,6 +96,27 @@ public class LobbySceneManager : MonoBehaviour
         LobbyNetworkServer.Instance.MatchingRequest();
     }
 
+
+    void ProcessLobbyPacket()
+    {
+        var packetList = LobbyNetworkServer.Instance.ReadPacket();
+
+        if (packetList != null)
+        {
+            foreach (var packet in packetList)
+            {
+                if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
+                {
+                    //SetDisconnectd();
+                    Debug.Log("서버와 접속 종료 !!!");
+                }
+                else
+                {
+                    LobbyServerPacketHandler.Process(packet);
+                }
+            }
+        }
+    }
 
     void ProcessMatchingResponse()
     {

@@ -12,7 +12,7 @@ namespace csharp_test_client
 {
     public partial class mainForm : Form
     {
-        ClientNetLib.TransportTCP TcpTransport = new ClientNetLib.TransportTCP();
+        ClientNetLib.TransportTCP TcpNetLobbyServer = new ClientNetLib.TransportTCP();
 
         bool IsBackGroundProcessRunning = false;
 
@@ -26,7 +26,7 @@ namespace csharp_test_client
 
         private void mainForm_Load(object sender, EventArgs e)
         {
-            TcpTransport.DebugPrintFunc = WriteDebugLog;
+            TcpNetLobbyServer.DebugPrintFunc = WriteDebugLog;
             
             IsBackGroundProcessRunning = true;
             dispatcherUITimer = new System.Windows.Threading.DispatcherTimer();
@@ -44,7 +44,7 @@ namespace csharp_test_client
         {
             IsBackGroundProcessRunning = false;
 
-            TcpTransport.Disconnect();
+            TcpNetLobbyServer.Disconnect();
         }
 
         
@@ -61,12 +61,12 @@ namespace csharp_test_client
 
             try
             {
-                if (TcpTransport.IsConnected == false)
+                if (TcpNetLobbyServer.IsConnected == false)
                 {
                     return;
                 }
 
-                var packetList = TcpTransport.GetPacket();
+                var packetList = TcpNetLobbyServer.GetPacket();
 
                 foreach(var packet in packetList)
                 {
@@ -139,7 +139,7 @@ namespace csharp_test_client
 
         public void PostSendPacket(PACKET_ID packetID, byte[] bodyData)
         {
-            if (TcpTransport.IsConnected == false)
+            if (TcpNetLobbyServer.IsConnected == false)
             {
                 DevLog.Write("서버 연결이 되어 있지 않습니다", LOG_LEVEL.ERROR);
                 return;
@@ -162,7 +162,7 @@ namespace csharp_test_client
                 dataSource.AddRange(bodyData);
             }
 
-            TcpTransport.Send(dataSource.ToArray());
+            TcpNetLobbyServer.Send(dataSource.ToArray());
         }
 
         void AddRoomUserList(Int64 userUniqueId, string userID)
@@ -203,7 +203,7 @@ namespace csharp_test_client
 
             int port = Convert.ToInt32(textBoxPort.Text);
 
-            if (TcpTransport.Connect(address, port))
+            if (TcpNetLobbyServer.Connect(address, port))
             {
                 labelStatus.Text = string.Format("{0}. 서버에 접속 중", DateTime.Now);
                 btnConnect.Enabled = false;
@@ -220,7 +220,7 @@ namespace csharp_test_client
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
             SetDisconnectd();
-            TcpTransport.Disconnect();
+            TcpNetLobbyServer.Disconnect();
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -69,7 +69,7 @@ namespace GameNetwork
 
             if (response.Result == (Int16)ERROR_CODE.NONE)
             {
-                Debug.Log("로그인성공");
+                Debug.Log("게임 서버 로그인 성공");
                 GameNetworkServer.Instance.ClientStatus = GameNetworkServer.CLIENT_STATUS.LOGIN;
                 //로그인 성공처리
             }

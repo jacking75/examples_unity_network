@@ -74,10 +74,10 @@ namespace GameNetwork
         {
             if (Network.Connect(ip_address, port_val))
             {
-                Debug.Log("접속성공!");
+                Debug.Log("게임 서버 접속성공!");
             }
             else {
-                Debug.Log("접속실패");
+                Debug.Log("게임 서버 접속실패");
             }
         }
 
@@ -89,7 +89,8 @@ namespace GameNetwork
             request.UserID = loginID;
             
             var bodyData = request.ToBytes();
-            
+
+            Debug.Log("게임 서버 로그인 요청");
             PostSendPacket(PACKET_ID.REQ_GAME_LOGIN, bodyData);
         }
 
@@ -136,6 +137,27 @@ namespace GameNetwork
             PostSendPacket(PACKET_ID.REQ_GAME_END, null);
         }
 
+        public void ProcessGameServerPacket()
+        {
+            var packetList = ReadPacket();
+
+            if (packetList != null)
+            {
+                foreach (var packet in packetList)
+                {
+                    if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
+                    {
+                        //SetDisconnectd();
+                        Debug.Log("서버와 접속 종료 !!!");
+                    }
+                    else
+                    {
+                        GameServerPacketHandler.Process(packet);
+                    }
+                }
+            }
+        }
+
 
         //네트워크 Read/Send 스레드 부분
         void PostSendPacket(PACKET_ID packetID, byte[] bodyData)
@@ -171,7 +193,7 @@ namespace GameNetwork
             Network.Send(dataSource.ToArray());
         }
 
-        public List<ClientNetLib.PacketData> ReadPacket()
+        List<ClientNetLib.PacketData> ReadPacket()
         {
             if (Network.IsConnected == false)
             {
@@ -185,6 +207,9 @@ namespace GameNetwork
         {
             Debug.Log(msg);
         }
+
+
+        
 
     }
 

@@ -211,7 +211,7 @@ namespace LobbyServer
                 var response = new LobbyMatchNtfPacket();
                 response.Decode(data);
 
-                Debug.Log("매칭알림 패킷 도착");
+                Debug.Log($"매칭알림 패킷 도착: GameServerIP:{response.GameServerIP}, Port:{response.GameServerPort}");
 
                 if( LobbySceneManager.FillMatchInfo(response.GameServerIP, response.GameServerPort, response.RoomNumber) == true)
                 {

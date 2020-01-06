@@ -29,24 +29,7 @@ public class GameSceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var packetList = GameNetworkServer.Instance.ReadPacket();
-
-        if (packetList != null)
-        {
-            foreach (var packet in packetList)
-            {
-                if (packet.PacketID == ClientNetLib.PacketDef.SysPacketIDDisConnectdFromServer)
-                {
-                    //SetDisconnectd();
-                    Debug.Log("서버와 접속 종료 !!!");
-                }
-                else
-                {
-                    GameServerPacketHandler.Process(packet);
-                }
-            }
-        }
-        
+        GameNetworkServer.Instance.ProcessGameServerPacket();
 
         //채팅메세지 확인.
         if (GameNetworkServer.Instance.ChatMsgQueue.Count > 0)
@@ -103,6 +86,5 @@ public class GameSceneManager : MonoBehaviour
         ErrorMessage.text = message;
 
     }
-
-
+          
 }

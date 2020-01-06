@@ -46,6 +46,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.Room = new System.Windows.Forms.GroupBox();
+            this.button8 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.btnRoomRelay = new System.Windows.Forms.Button();
             this.btnRoomChat = new System.Windows.Forms.Button();
@@ -61,7 +62,6 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
             this.groupBox5.SuspendLayout();
             this.Room.SuspendLayout();
             this.SuspendLayout();
@@ -109,7 +109,7 @@
             this.textBoxPort.Name = "textBoxPort";
             this.textBoxPort.Size = new System.Drawing.Size(58, 22);
             this.textBoxPort.TabIndex = 18;
-            this.textBoxPort.Text = "32452";
+            this.textBoxPort.Text = "11022";
             this.textBoxPort.WordWrap = false;
             // 
             // label10
@@ -260,6 +260,17 @@
             this.Room.TabIndex = 47;
             this.Room.TabStop = false;
             this.Room.Text = "Room";
+            // 
+            // button8
+            // 
+            this.button8.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.button8.Location = new System.Drawing.Point(458, 45);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(98, 28);
+            this.button8.TabIndex = 55;
+            this.button8.Text = "게임종료";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // button7
             // 
@@ -413,17 +424,6 @@
             this.button6.Text = "매칭 요청";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // button8
-            // 
-            this.button8.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button8.Location = new System.Drawing.Point(458, 45);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(98, 28);
-            this.button8.TabIndex = 55;
-            this.button8.Text = "게임종료";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // mainForm
             // 
