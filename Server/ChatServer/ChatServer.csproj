@@ -28,10 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSMsgPackPacket\CSMsgPackPacket.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="SuperSocket.Common">
       <HintPath>..\00_superSocketLite_libs\netstandard2.1\SuperSocket.Common.dll</HintPath>
     </Reference>
