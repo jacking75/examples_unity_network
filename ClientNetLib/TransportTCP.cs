@@ -98,7 +98,7 @@ namespace ClientNetLib
 				return packetList;
 			}
 
-			if (buffer.Length > 1)
+			if (buffer != null && buffer.Length > 1)
 			{
 				PacketBuffer.Write(buffer, 0, buffer.Length);
 
@@ -212,6 +212,7 @@ namespace ClientNetLib
 			// 수신처리.
 			try
 			{
+				bool isCheckedClseEvent = false;
 				byte[] buffer = new byte[MtuSize];
 
 				while (TcpSocket.Poll(0, SelectMode.SelectRead))
@@ -219,8 +220,8 @@ namespace ClientNetLib
 					int recvSize = TcpSocket.Receive(buffer, buffer.Length, SocketFlags.None);
 					if (recvSize == 0)
 					{
-						DebugPrintFunc("Disconnected recv from client.");
-						Disconnect();
+						isCheckedClseEvent = true;
+						break;
 					}
 					else if (recvSize > 0)
 					{
@@ -229,9 +230,21 @@ namespace ClientNetLib
 						RecvQueue.Enqueue(recvData);
 					}
 				}
+
+				if(isCheckedClseEvent || TcpSocket.Connected == false)
+				{
+					DebugPrintFunc("Disconnected recv from client.");
+
+					RecvQueue.Enqueue(null);
+					Disconnect();
+				}
 			}
 			catch
 			{
+				DebugPrintFunc("Disconnected recv from client.");
+
+				RecvQueue.Enqueue(null);
+				Disconnect();
 				return;
 			}
 		}		
