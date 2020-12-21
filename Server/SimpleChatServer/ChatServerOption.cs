@@ -30,14 +30,5 @@ namespace ChatServer
         [Option("sendBufferSize", Required = true, HelpText = "sendBufferSize")]
         public int SendBufferSize { get; set; }
 
-        [Option("roomMaxCount", Required = true, HelpText = "Max Romm Count")]
-        public int RoomMaxCount { get; set; } = 0;
-
-        [Option("roomMaxUserCount", Required = true, HelpText = "RoomMaxUserCount")]
-        public int RoomMaxUserCount { get; set; } = 0;
-
-        [Option("roomStartNumber", Required = true, HelpText = "RoomStartNumber")]
-        public int RoomStartNumber { get; set; } = 0;      
-
     }    
 }

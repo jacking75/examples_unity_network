@@ -89,7 +89,7 @@
             this.textBoxPort.Name = "textBoxPort";
             this.textBoxPort.Size = new System.Drawing.Size(51, 21);
             this.textBoxPort.TabIndex = 18;
-            this.textBoxPort.Text = "11022";
+            this.textBoxPort.Text = "32452";
             this.textBoxPort.WordWrap = false;
             // 
             // label10
@@ -116,7 +116,7 @@
             // textBoxIP
             // 
             this.textBoxIP.Location = new System.Drawing.Point(68, 19);
-            this.textBoxIP.MaxLength = 6;
+            this.textBoxIP.MaxLength = 20;
             this.textBoxIP.Name = "textBoxIP";
             this.textBoxIP.Size = new System.Drawing.Size(87, 21);
             this.textBoxIP.TabIndex = 11;
