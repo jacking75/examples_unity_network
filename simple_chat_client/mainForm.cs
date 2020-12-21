@@ -196,21 +196,7 @@ namespace csharp_test_client
             TcpNetLobbyServer.Disconnect();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(textSendText.Text))
-            {
-                MessageBox.Show("보낼 텍스트를 입력하세요");
-                return;
-            }
-
-            var body = Encoding.UTF8.GetBytes(textSendText.Text);
-
-            PostSendPacket(PACKET_ID.PACKET_ID_ECHO, body);
-
-            DevLog.Write($"Echo 요청:  {textSendText.Text}, {body.Length}");
-        }
-
+        
         // 간이 채팅
         private void button3_Click(object sender, EventArgs e)
         {
