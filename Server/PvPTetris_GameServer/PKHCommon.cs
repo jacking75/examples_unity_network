@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using MessagePack;
 
 
 
@@ -53,7 +52,7 @@ namespace LobbyServer
                         UserID = user.ID,
                     };
 
-                    var packetBodyData = MessagePackSerializer.Serialize(packet);
+                    var packetBodyData = packet.Encode();
                     var internalPacket = new ServerPacketData();
                     internalPacket.Assign(requestData.SessionID, (UInt16)SYS_PACKET_ID.NTF_IN_ROOM_LEAVE, packetBodyData);
 

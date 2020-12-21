@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using MessagePack;
+
 
 
 
@@ -123,8 +123,10 @@ namespace LobbyServer
         {
             LobbyServer.MainLogger.Debug($"NotifyLeaveInternal. SessionID: {packetData.SessionID}");
 
-            var reqData = MessagePackSerializer.Deserialize<PKTInternalNtfLobbyLeave>(packetData.BodyData);
-            LeaveLobbyUser(packetData.SessionID, reqData.LobbyNumber);
+            var ntfData = new PKTInternalNtfLobbyLeave();
+            ntfData.Decode(packetData.BodyData);
+
+            LeaveLobbyUser(packetData.SessionID, ntfData.LobbyNumber);
         }
 
 

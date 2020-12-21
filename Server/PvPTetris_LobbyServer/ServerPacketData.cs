@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using MessagePack;
 
 namespace LobbyServer
 {
@@ -49,39 +48,26 @@ namespace LobbyServer
     }
 
 
-
-    [MessagePackObject]
-    public class PKTInternalReqRoomEnter
-    {
-        [Key(0)]
-        public int RoomNumber;
-
-        [Key(1)]
-        public string UserID;        
-    }
-
-    [MessagePackObject]
-    public class PKTInternalResRoomEnter
-    {
-        [Key(0)]
-        public ERROR_CODE Result;
-
-        [Key(1)]
-        public int RoomNumber;
-
-        [Key(2)]
-        public string UserID;
-    }
-
-
-    [MessagePackObject]
     public class PKTInternalNtfLobbyLeave
     {
-        [Key(0)]
         public int LobbyNumber;
-
-        [Key(1)]
         public string UserID;
+
+        public byte[] Encode()
+        {
+            List<byte> dataSource = new List<byte>();
+            dataSource.AddRange(BitConverter.GetBytes((UInt32)LobbyNumber));
+            dataSource.AddRange(Encoding.UTF8.GetBytes(UserID));
+            return dataSource.ToArray();
+        }
+
+        public void Decode(byte[] bodyData)
+        {
+            LobbyNumber = BitConverter.ToInt32(bodyData, 0);
+            UserID = Encoding.UTF8.GetString(bodyData, 4, (bodyData.Length - 4));
+        }
     }
+
+    
 
 }

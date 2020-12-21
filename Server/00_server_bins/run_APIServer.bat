@@ -1,1 +1,1 @@
-dotnet netcoreapp3.1\APIServer.dll --lobbyServerIP 127.0.0.1 --lobbyServerPort 11021
+dotnet net5.0\APIServer.dll --lobbyServerIP 127.0.0.1 --lobbyServerPort 11021

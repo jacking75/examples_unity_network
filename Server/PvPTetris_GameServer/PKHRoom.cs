@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using MessagePack;
-
 
 
 namespace LobbyServer
@@ -138,8 +136,10 @@ namespace LobbyServer
         {
             GameServer.MainLogger.Debug($"NotifyLeaveInternal. SessionID: {packetData.SessionID}");
 
-            var reqData = MessagePackSerializer.Deserialize<PKTInternalNtfRoomLeave>(packetData.BodyData);
-            LeaveRoomUser(packetData.SessionID, reqData.RoomNumber);
+            var ntfData = new PKTInternalNtfRoomLeave();
+            ntfData.Decode(packetData.BodyData);
+  
+            LeaveRoomUser(packetData.SessionID, ntfData.RoomNumber);
         }
 
 
