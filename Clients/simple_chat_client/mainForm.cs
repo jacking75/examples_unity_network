@@ -178,11 +178,12 @@ namespace csharp_test_client
 
             if (TcpNetLobbyServer.Connect(address, port))
             {
-                labelStatus.Text = string.Format("{0}. 서버에 접속 중", DateTime.Now);
+                labelStatus.Text = string.Format("{0}. 서버에 연결", DateTime.Now);
                 btnConnect.Enabled = false;
                 btnDisconnect.Enabled = true;
 
-                DevLog.Write($"서버에 접속 중", LOG_LEVEL.INFO);
+                System.Threading.Thread.Sleep(2000);
+                DevLog.Write($"서버에 연결", LOG_LEVEL.INFO);
             }
             else
             {
